@@ -57,4 +57,21 @@ class EmpresaServiceTest {
         assertEquals(empresa.getNome(), empresaCriada.getNome());
         assertEquals(empresa.getCnpj(), empresaCriada.getCnpj());
     }
+
+    @Test
+    void deveriaDeletarEmpresa(){
+        Long id = 1l;
+        EmpresaFormDTO empresaFormDTO = new EmpresaFormDTO();
+        empresaFormDTO.setCep("11365-210");
+        empresaFormDTO.setCnpj("51.193.861/0001-74");
+        empresaFormDTO.setNome("teste");
+        empresaFormDTO.setTelefone("(13) 3462-1234");
+        empresaFormDTO.setNumero(202);
+
+        Empresa empresaCriada = empresaService.criar(empresaFormDTO);
+
+        empresaService.deletarPorId(empresaCriada.getId());
+
+        assertThrows(RuntimeException.class, () -> empresaService.buscarPorId(1l));
+    }
 }
