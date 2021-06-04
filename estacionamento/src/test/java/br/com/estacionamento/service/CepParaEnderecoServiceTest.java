@@ -15,7 +15,7 @@ class CepParaEnderecoServiceTest {
     private CepParaEnderecoService cepParaEnderecoService;
 
     @Test
-    void buscarDadosEndereco() {
+    void deveriaEncontrarDadosDeEndereco() {
         try {
             Endereco enderecoBusca = cepParaEnderecoService.buscarDadosEndereco("01001-000", 202);
             assertEquals(enderecoBusca.getCep(), "01001-000");
