@@ -1,19 +1,16 @@
 package br.com.estacionamento.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Empresa {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String cnpj;
-    @OneToMany
+    @OneToMany (mappedBy = "empresa")
     private List<Telefone> telefone = new ArrayList<>();
     @OneToOne
     private Endereco endereco;
@@ -61,8 +58,7 @@ public class Empresa {
         this.endereco = endereco;
     }
 
-    public List<Telefone> adicionarTelefone(Telefone telefone){
+    public void adicionarTelefone(Telefone telefone){
         this.telefone.add(telefone);
-        return this.telefone;
     }
 }

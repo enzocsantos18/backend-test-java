@@ -1,0 +1,36 @@
+package br.com.estacionamento.controller;
+
+import br.com.estacionamento.domain.Empresa;
+import br.com.estacionamento.domain.Endereco;
+import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
+import br.com.estacionamento.service.EmpresaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+
+
+@RestController
+@RequestMapping("/empresa")
+public class EmpresaController {
+
+    @Autowired
+    private EmpresaService empresaService;
+
+    @PostMapping
+    public ResponseEntity<Empresa> criarEmpresa(@RequestBody @Valid  EmpresaFormDTO dadosEmpresa){
+        try {
+
+            Empresa empresa = empresaService.criar(dadosEmpresa);
+            return ResponseEntity.ok(empresa);
+        }catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+}
