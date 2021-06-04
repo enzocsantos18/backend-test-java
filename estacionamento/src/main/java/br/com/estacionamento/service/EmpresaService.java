@@ -62,4 +62,14 @@ public class EmpresaService {
         return empresa.get();
 
     }
+
+    @Transactional
+    public void deletarPorId(Long id){
+        Optional<Empresa> empresa = empresaRepository.findById(id);
+        if (!empresa.isPresent()){
+            throw new RuntimeException();
+        }
+
+        empresaRepository.delete(empresa.get());
+    }
 }

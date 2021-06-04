@@ -1,5 +1,7 @@
 package br.com.estacionamento.domain;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +12,9 @@ public class Empresa {
     private Long id;
     private String nome;
     private String cnpj;
-    @OneToMany (mappedBy = "empresa")
+    @OneToMany (mappedBy = "empresa", cascade = CascadeType.ALL)
     private List<Telefone> telefone = new ArrayList<>();
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
 
     public Empresa() {

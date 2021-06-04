@@ -32,7 +32,6 @@ public class EmpresaController {
         }
     }
 
-
     @PostMapping
     public ResponseEntity<Empresa> criarEmpresa(@RequestBody @Valid  EmpresaFormDTO dadosEmpresa){
         try {
@@ -44,4 +43,15 @@ public class EmpresaController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deletarEmpresa(@PathVariable("id") Long id){
+        try{
+            empresaService.deletarPorId(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }
