@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class EmpresaService {
@@ -34,7 +35,6 @@ public class EmpresaService {
         }
 
         try{
-
             Endereco endereco = cepParaEnderecoService.buscarDadosEndereco(dadosEmpresa.getCep());
             endereco.setNumero(dadosEmpresa.getNumero());
             endereco = enderecoRepository.save(endereco);
@@ -52,4 +52,14 @@ public class EmpresaService {
         }
     }
 
+    public Empresa buscarPorId(Long id){
+        Optional<Empresa> empresa = empresaRepository.findById(id);
+
+        if (!empresa.isPresent()){
+            throw new RuntimeException();
+        }
+
+        return empresa.get();
+
+    }
 }

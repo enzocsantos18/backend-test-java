@@ -7,10 +7,7 @@ import br.com.estacionamento.service.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -21,6 +18,20 @@ public class EmpresaController {
 
     @Autowired
     private EmpresaService empresaService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Empresa> buscarEmpresaPeloId(@PathVariable("id") Long id){
+        try {
+
+            Empresa empresa = empresaService.buscarPorId(id);
+            return ResponseEntity.ok(empresa);
+
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
     @PostMapping
     public ResponseEntity<Empresa> criarEmpresa(@RequestBody @Valid  EmpresaFormDTO dadosEmpresa){
