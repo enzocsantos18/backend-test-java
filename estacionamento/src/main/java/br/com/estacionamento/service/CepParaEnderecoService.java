@@ -15,7 +15,7 @@ import java.net.http.HttpResponse;
 
 @Service
 public class CepParaEnderecoService {
-    public Endereco buscarDadosEndereco(String cep) throws URISyntaxException, IOException, InterruptedException {
+    public Endereco buscarDadosEndereco(String cep, Integer numero) throws URISyntaxException, IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest.newBuilder(new URI("https://viacep.com.br/ws/"+ cep +"/json/")).GET().build();
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -24,7 +24,7 @@ public class CepParaEnderecoService {
         ViaCepResponse viaCepResponse = objectMapper.readValue(response.body(), ViaCepResponse.class);
 
         Endereco endereco = viaCepResponse.converterParaEndereco();
-
+        endereco.setNumero(numero);
         return endereco;
     }
 }
