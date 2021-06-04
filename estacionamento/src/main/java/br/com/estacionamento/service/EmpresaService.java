@@ -9,6 +9,7 @@ import br.com.estacionamento.repository.EmpresaRepository;
 import br.com.estacionamento.repository.EnderecoRepository;
 import br.com.estacionamento.repository.TelefoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
