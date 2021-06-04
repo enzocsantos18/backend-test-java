@@ -1,20 +1,29 @@
 package br.com.estacionamento.service;
 
 import br.com.estacionamento.domain.Endereco;
+import br.com.estacionamento.domain.ViaCepResponse;
 import br.com.estacionamento.domain.dto.out.EnderecoDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @Service
 public class CepParaEnderecoService {
-    public Endereco buscarDadosEndereco(String cep){
-        Endereco endereco = new Endereco();
+    public Endereco buscarDadosEndereco(String cep) throws URISyntaxException, IOException, InterruptedException {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest httpRequest = HttpRequest.newBuilder(new URI("https://viacep.com.br/ws/"+ cep +"/json/")).GET().build();
+        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        endereco.setCep(cep);
-        endereco.setLogradouro("teste");
-        endereco.setNumero(202);
-        endereco.setBairro("teste");
-        endereco.setCidade("teste");
-        endereco.setEstado("teste");
+        ViaCepResponse viaCepResponse = objectMapper.readValue(response.body(), ViaCepResponse.class);
+
+        Endereco endereco = viaCepResponse.converterParaEndereco();
 
         return endereco;
     }

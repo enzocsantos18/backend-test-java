@@ -33,18 +33,23 @@ public class EmpresaService {
            throw new RuntimeException();
         }
 
+        try{
 
-        Endereco endereco = cepParaEnderecoService.buscarDadosEndereco(dadosEmpresa.getCep());
-        endereco = enderecoRepository.save(endereco);
-        empresa.setEndereco(endereco);
-        empresa = empresaRepository.save(empresa);
-        Telefone telefone = dadosEmpresa.getTelefone();
-        telefone.setEmpresa(empresa);
-        telefone = telefoneRepository.save(telefone);
+            Endereco endereco = cepParaEnderecoService.buscarDadosEndereco(dadosEmpresa.getCep());
+            endereco.setNumero(dadosEmpresa.getNumero());
+            endereco = enderecoRepository.save(endereco);
+            empresa.setEndereco(endereco);
+            empresa = empresaRepository.save(empresa);
+            Telefone telefone = dadosEmpresa.getTelefone();
+            telefone.setEmpresa(empresa);
+            telefone = telefoneRepository.save(telefone);
 
-        empresa.adicionarTelefone(telefone);
-
-        return empresa;
+            empresa.adicionarTelefone(telefone);
+            return empresa;
+        }
+        catch(Exception e){
+            throw new RuntimeException();
+        }
     }
 
 }
