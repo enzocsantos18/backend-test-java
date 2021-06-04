@@ -11,11 +11,12 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
-
 class EmpresaServiceTest {
 
     @Autowired
@@ -36,5 +37,24 @@ class EmpresaServiceTest {
         assertEquals(empresa.getCnpj(), "51.193.861/0001-74");
         assertTrue(empresa.getId() > 0);
 
+    }
+
+    @Test
+    void deveriaRetornarEmpresaBuscaPorId(){
+        Long id = 1l;
+        EmpresaFormDTO empresaFormDTO = new EmpresaFormDTO();
+        empresaFormDTO.setCep("11365-210");
+        empresaFormDTO.setCnpj("51.193.861/0001-74");
+        empresaFormDTO.setNome("teste");
+        empresaFormDTO.setTelefone("(13) 3462-1234");
+        empresaFormDTO.setNumero(202);
+
+        Empresa empresaCriada = empresaService.criar(empresaFormDTO);
+
+
+        Empresa empresa = empresaService.buscarPorId(id);
+
+        assertEquals(empresa.getNome(), empresaCriada.getNome());
+        assertEquals(empresa.getCnpj(), empresaCriada.getCnpj());
     }
 }
