@@ -21,4 +21,20 @@ public class Estacionamento {
     public Empresa getEmpresa() {
         return empresa;
     }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
