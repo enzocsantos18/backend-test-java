@@ -4,6 +4,7 @@ import br.com.estacionamento.domain.Empresa;
 import br.com.estacionamento.domain.Estacionamento;
 import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
 import br.com.estacionamento.domain.dto.in.EstacionamentoFormDTO;
+import br.com.estacionamento.domain.dto.in.EstacionamentoFormUpdateDTO;
 import br.com.estacionamento.service.EmpresaService;
 import br.com.estacionamento.service.EstacionamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,4 +70,17 @@ public class EstacionamentoController {
         }
     }
 
+    @PutMapping("/{empresa}/{id}")
+    public ResponseEntity<Estacionamento> atualizar(@PathVariable("empresa") Long empresaId,
+                                  @PathVariable("id") Long estacionamentoId,
+                                    @RequestBody EstacionamentoFormUpdateDTO dadosEstacionamento
+    ){
+        try {
+            Estacionamento estacionamento = estacionamentoService.atualizar(empresaId, estacionamentoId,dadosEstacionamento );
+            return ResponseEntity.ok(estacionamento);
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
