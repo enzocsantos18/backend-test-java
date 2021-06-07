@@ -38,7 +38,7 @@ public class EmpresaController {
     public ResponseEntity<Empresa> criarEmpresa(@RequestBody @Valid  EmpresaFormDTO dadosEmpresa, UriComponentsBuilder uriBuilder){
         try {
             Empresa empresa = empresaService.criar(dadosEmpresa);
-            URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(empresa.getId()).toUri();
+            URI uri = uriBuilder.path("/empresa/{id}").buildAndExpand(empresa.getId()).toUri();
             return ResponseEntity.created(uri).body(empresa);
         }catch (Exception e) {
             return ResponseEntity.badRequest().build();
