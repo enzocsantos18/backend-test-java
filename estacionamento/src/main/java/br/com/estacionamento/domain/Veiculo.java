@@ -12,6 +12,9 @@ public class Veiculo {
     @ManyToOne
     private Modelo modelo;
 
+    @ManyToOne
+    private Estacionamento estacionamento;
+
     public Veiculo() {
     }
 
@@ -41,6 +44,14 @@ public class Veiculo {
 
     public Modelo getModelo() {
         return modelo;
+    }
+
+    public Estacionamento getEstacionamento() {
+        return estacionamento;
+    }
+
+    public void setEstacionamento(Estacionamento estacionamento) {
+        this.estacionamento = estacionamento;
     }
 
     public void setModelo(Modelo modelo) {

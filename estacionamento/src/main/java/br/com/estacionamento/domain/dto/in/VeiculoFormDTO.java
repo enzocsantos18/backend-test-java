@@ -1,5 +1,6 @@
 package br.com.estacionamento.domain.dto.in;
 
+import br.com.estacionamento.domain.Estacionamento;
 import br.com.estacionamento.domain.Modelo;
 import br.com.estacionamento.domain.Veiculo;
 
@@ -13,8 +14,10 @@ public class VeiculoFormDTO {
     private String placa;
     @NotNull @NotEmpty
     private String cor;
-    @Min(1)
+    @Min(1) 
     private Long id_modelo;
+    @Min(1)
+    private Long id_estacionamento;
 
     public String getPlaca() {
         return placa;
@@ -40,11 +43,20 @@ public class VeiculoFormDTO {
         this.id_modelo = id_modelo;
     }
 
-    public Veiculo converterParaVeiculo(Modelo modelo) {
+    public Long getId_estacionamento() {
+        return id_estacionamento;
+    }
+
+    public void setId_estacionamento(Long id_estacionamento) {
+        this.id_estacionamento = id_estacionamento;
+    }
+
+    public Veiculo converterParaVeiculo(Modelo modelo, Estacionamento estacionamento) {
         Veiculo veiculo = new Veiculo();
         veiculo.setPlaca(placa);
         veiculo.setCor(this.cor);
         veiculo.setModelo(modelo);
+        veiculo.setEstacionamento(estacionamento);
 
         return veiculo;
     }
