@@ -1,13 +1,13 @@
 package br.com.estacionamento.controller;
 
 import br.com.estacionamento.domain.Empresa;
-import br.com.estacionamento.domain.Endereco;
+import br.com.estacionamento.domain.Veiculo;
 import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
-import br.com.estacionamento.domain.dto.in.EmpresaFormUpdateDTO;
+import br.com.estacionamento.domain.dto.in.VeiculoFormDTO;
 import br.com.estacionamento.service.EmpresaService;
+import br.com.estacionamento.service.VeiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -16,42 +16,20 @@ import java.net.URI;
 
 
 @RestController
-@RequestMapping("/empresa")
-public class EmpresaController {
+@RequestMapping("/veiculo")
+public class VeiculoController {
 
     @Autowired
-    private EmpresaService empresaService;
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Empresa> buscarEmpresaPeloId(@PathVariable("id") Long id){
-        try {
-
-            Empresa empresa = empresaService.buscarPorId(id);
-            return ResponseEntity.ok(empresa);
-        }
-        catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
-    }
+    private VeiculoService veiculoService;
 
     @PostMapping
-    public ResponseEntity<Empresa> criarEmpresa(@RequestBody @Valid  EmpresaFormDTO dadosEmpresa, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<Veiculo> criarVeiculo(@RequestBody @Valid VeiculoFormDTO dadosVeiculo, UriComponentsBuilder uriBuilder){
         try {
-            Empresa empresa = empresaService.criar(dadosEmpresa);
-            URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(empresa.getId()).toUri();
-            return ResponseEntity.created(uri).body(empresa);
+            Veiculo veiculo = veiculoService.criar(dadosVeiculo);
+            URI uri = uriBuilder.path("/veiculo/{id}").buildAndExpand(veiculo.getId()).toUri();
+            return ResponseEntity.created(uri).body(veiculo);
         }catch (Exception e) {
             return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity deletarEmpresa(@PathVariable("id") Long id){
-        try{
-            empresaService.deletarPorId(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e){
-            return ResponseEntity.notFound().build();
         }
     }
 
