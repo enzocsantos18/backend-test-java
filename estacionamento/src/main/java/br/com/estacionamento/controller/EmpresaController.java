@@ -23,7 +23,7 @@ public class EmpresaController {
     private EmpresaService empresaService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Empresa> buscarEmpresaPeloId(@PathVariable("id") Long id){
+    public ResponseEntity<Empresa> buscar(@PathVariable("id") Long id){
         try {
 
             Empresa empresa = empresaService.buscarPorId(id);
@@ -35,7 +35,7 @@ public class EmpresaController {
     }
 
     @PostMapping
-    public ResponseEntity<Empresa> criarEmpresa(@RequestBody @Valid  EmpresaFormDTO dadosEmpresa, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<Empresa> criar(@RequestBody @Valid  EmpresaFormDTO dadosEmpresa, UriComponentsBuilder uriBuilder){
         try {
             Empresa empresa = empresaService.criar(dadosEmpresa);
             URI uri = uriBuilder.path("/empresa/{id}").buildAndExpand(empresa.getId()).toUri();
@@ -46,7 +46,7 @@ public class EmpresaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deletarEmpresa(@PathVariable("id") Long id){
+    public ResponseEntity deletar(@PathVariable("id") Long id){
         try{
             empresaService.deletarPorId(id);
             return ResponseEntity.ok().build();
