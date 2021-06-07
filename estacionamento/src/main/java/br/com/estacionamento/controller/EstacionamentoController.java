@@ -57,4 +57,16 @@ public class EstacionamentoController {
         }
     }
 
+    @DeleteMapping("/{empresa}/{id}")
+    public ResponseEntity deletar(@PathVariable("empresa") Long empresaId,
+                                  @PathVariable("id") Long estacionamentoId){
+        try {
+            estacionamentoService.deletar(empresaId, estacionamentoId);
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

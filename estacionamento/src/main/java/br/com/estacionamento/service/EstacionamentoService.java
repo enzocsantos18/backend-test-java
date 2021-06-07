@@ -51,4 +51,14 @@ public class EstacionamentoService {
 
         return estacionamento.get();
     }
+
+    public void deletar(Long empresaId, Long estacionamentoId) {
+        Optional<Estacionamento> estacionamento = estacionamentoRepository.findByEmpresaIdAndId(empresaId, estacionamentoId);
+
+        if (!estacionamento.isPresent()){
+            throw new RuntimeException("Estacionamento não existe");
+        }
+
+        estacionamentoRepository.delete(estacionamento.get());
+    }
 }
