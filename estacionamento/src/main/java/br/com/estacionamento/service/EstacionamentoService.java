@@ -8,6 +8,7 @@ import br.com.estacionamento.repository.EstacionamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -32,5 +33,11 @@ public class EstacionamentoService {
         Estacionamento estacionamentoCriado = estacionamentoRepository.save(estacionamento);
 
         return estacionamentoCriado;
+    }
+
+    public List<Estacionamento> listagem(Long empresaId){
+        List<Estacionamento> estacionamentos = estacionamentoRepository.findByEmpresaId(empresaId);
+
+        return estacionamentos;
     }
 }

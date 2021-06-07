@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 
 @RestController
@@ -22,8 +23,6 @@ public class EstacionamentoController {
     @Autowired
     private EstacionamentoService estacionamentoService;
 
-
-
     @PostMapping
     public ResponseEntity<Estacionamento> criar(@RequestBody @Valid EstacionamentoFormDTO dadosEstacionamento, UriComponentsBuilder uriBuilder){
         try {
@@ -32,6 +31,17 @@ public class EstacionamentoController {
             return ResponseEntity.created(uri).body(estacionamento);
         }catch (Exception e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Estacionamento>> listagemPorEmpresa(@PathVariable("id") Long empresaId){
+        try {
+            List<Estacionamento> listagem = estacionamentoService.listagem(empresaId);
+            return ResponseEntity.ok(listagem);
+        }
+        catch (Exception e){
+            return ResponseEntity.notFound().build();
         }
     }
 }
