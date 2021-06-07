@@ -1,8 +1,10 @@
 package br.com.estacionamento.service;
 
+import br.com.estacionamento.domain.Estacionamento;
 import br.com.estacionamento.domain.Modelo;
 import br.com.estacionamento.domain.Veiculo;
 import br.com.estacionamento.domain.dto.in.VeiculoFormDTO;
+import br.com.estacionamento.repository.EstacionamentoRepository;
 import br.com.estacionamento.repository.ModeloRepository;
 import br.com.estacionamento.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +21,44 @@ public class VeiculoService {
     @Autowired
     private ModeloRepository modeloRepository;
 
+    @Autowired
+    private EstacionamentoRepository estacionamentoRepository;
+
+
     public Veiculo criar(VeiculoFormDTO veiculoDTO) {
         Optional<Modelo> modeloEncontrado = modeloRepository.findById(veiculoDTO.getId_modelo());
         if (!modeloEncontrado.isPresent()){
             throw new RuntimeException("Modelo não existente");
         }
 
-        Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlaca(veiculoDTO.getPlaca());
+
+        Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(veiculoDTO.getId_estacionamento());
+        if (!estacionamentoEncontrado.isPresent()){
+            throw new RuntimeException("Estacionamento não existe");
+        }
+
+        Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(veiculoDTO.getPlaca(), veiculoDTO.getId_estacionamento());
         if (veiculoEncontrado.isPresent()){
             throw new RuntimeException("Veiculo já cadastrado");
         }
 
+
         Modelo modelo = modeloEncontrado.get();
-        Veiculo veiculo = veiculoDTO.converterParaVeiculo(modelo);
+        Estacionamento estacionamento = estacionamentoEncontrado.get();
+        Veiculo veiculo = veiculoDTO.converterParaVeiculo(modelo, estacionamento);
         Veiculo veiculoSalvo = veiculoRepository.save(veiculo);
 
         return veiculoSalvo;
     }
 
+    public Veiculo buscarPelaPlaca(String placa, long estacionamentoId){
+        Optional<Veiculo> veiculo = veiculoRepository.findByPlacaAndEstacionamento(placa, estacionamentoId);
+
+        if (!veiculo.isPresent()){
+            throw new RuntimeException("Veiculo não encontrado");
+        }
+
+        return veiculo.get();
+
+    }
 }

@@ -22,6 +22,18 @@ public class VeiculoController {
     @Autowired
     private VeiculoService veiculoService;
 
+    @GetMapping("/{estacionamento}/{placa}")
+    public ResponseEntity<Veiculo> bucar(@PathVariable("placa") String placa, @PathVariable("estacionamento") Long estacionamento){
+        try {
+
+            Veiculo veiculo = veiculoService.buscarPelaPlaca(placa, estacionamento);
+            return ResponseEntity.ok(veiculo);
+        }
+        catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Veiculo> criarVeiculo(@RequestBody @Valid VeiculoFormDTO dadosVeiculo, UriComponentsBuilder uriBuilder){
         try {
