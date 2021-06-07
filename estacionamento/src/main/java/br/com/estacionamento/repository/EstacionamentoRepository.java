@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface EstacionamentoRepository extends JpaRepository<Estacionamento, Long> {
     List<Estacionamento> findByEmpresaId(long id);
+
+    Optional<Estacionamento> findByEmpresaIdAndId(Long empresaId, Long estacionamentoID);
 }

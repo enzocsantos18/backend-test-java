@@ -44,4 +44,17 @@ public class EstacionamentoController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/{empresa}/{id}")
+    public ResponseEntity<Estacionamento> buscarPorId(@PathVariable("empresa") Long empresaId, @PathVariable("id") Long estacionamentoId)
+    {
+        try {
+            Estacionamento estacionamento = estacionamentoService.buscar(empresaId, estacionamentoId);
+            return ResponseEntity.ok(estacionamento);
+        }
+        catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

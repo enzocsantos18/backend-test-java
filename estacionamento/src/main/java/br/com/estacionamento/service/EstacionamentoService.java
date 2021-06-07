@@ -8,6 +8,7 @@ import br.com.estacionamento.repository.EstacionamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,5 +40,15 @@ public class EstacionamentoService {
         List<Estacionamento> estacionamentos = estacionamentoRepository.findByEmpresaId(empresaId);
 
         return estacionamentos;
+    }
+
+    public Estacionamento buscar(Long empresaId, Long estacionamentoID){
+        Optional<Estacionamento> estacionamento = estacionamentoRepository.findByEmpresaIdAndId(empresaId, estacionamentoID);
+
+        if (!estacionamento.isPresent()){
+            throw new RuntimeException("Estacionamento não existe");
+        }
+
+        return estacionamento.get();
     }
 }
