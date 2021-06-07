@@ -10,6 +10,7 @@ import br.com.estacionamento.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -24,7 +25,7 @@ public class VeiculoService {
     @Autowired
     private EstacionamentoRepository estacionamentoRepository;
 
-
+    @Transactional
     public Veiculo criar(VeiculoFormDTO veiculoDTO) {
         Optional<Modelo> modeloEncontrado = modeloRepository.findById(veiculoDTO.getId_modelo());
         if (!modeloEncontrado.isPresent()){
@@ -61,4 +62,16 @@ public class VeiculoService {
         return veiculo.get();
 
     }
+
+    @Transactional
+    public void deletarPelaPlaca(String placa, long estacionamentoId){
+        Optional<Veiculo> veiculo = veiculoRepository.findByPlacaAndEstacionamento(placa, estacionamentoId);
+
+        if (!veiculo.isPresent()){
+            throw new RuntimeException("Veiculo não encontrado");
+        }
+
+        veiculoRepository.delete(veiculo.get());
+    }
+
 }
