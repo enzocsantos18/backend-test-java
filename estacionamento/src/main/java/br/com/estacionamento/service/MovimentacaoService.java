@@ -31,7 +31,7 @@ public class MovimentacaoService {
 
         Veiculo veiculo = veiculoEncontrado.get();
 
-        Optional<Movimentacao> verificarMovimentacao = movimentacaoRepository.findByVeiculoPlacaAndVeiculoEstacionamentoId(
+        Optional<Movimentacao> verificarMovimentacao = movimentacaoRepository.findFirstByVeiculoPlacaAndVeiculoEstacionamentoIdOrderByIdDesc(
                 veiculo.getPlaca(),
                 veiculo.getEstacionamento().getId()
         );
@@ -71,5 +71,31 @@ public class MovimentacaoService {
         return movimentacaoCriada;
     };
 
+    public Movimentacao saida(MovimentacaoFormDTO dadosMovimentacao) {
+        Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(dadosMovimentacao.getPlaca(), dadosMovimentacao.getId_estacionamento());
+        if (!veiculoEncontrado.isPresent()){
+            throw new RuntimeException("Veiculo não encontrado");
+        }
+
+        Veiculo veiculo = veiculoEncontrado.get();
+
+        Optional<Movimentacao> verificarMovimentacao = movimentacaoRepository.findFirstByVeiculoPlacaAndVeiculoEstacionamentoIdOrderByIdDesc(
+                veiculo.getPlaca(),
+                veiculo.getEstacionamento().getId()
+        );
+
+
+
+        if (verificarMovimentacao.isPresent() && verificarMovimentacao.get().getSaida() != null){
+            throw new RuntimeException("O veículo já deu saída");
+        }
+        Movimentacao movimentacao = verificarMovimentacao.get();
+
+        movimentacao.setSaida(LocalDateTime.now());
+
+        Movimentacao movimentacaoSaida = movimentacaoRepository.save(movimentacao);
+
+        return movimentacaoSaida;
+    }
 
 }

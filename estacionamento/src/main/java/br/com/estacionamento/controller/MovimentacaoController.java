@@ -24,9 +24,19 @@ public class MovimentacaoController {
 
 
     @PostMapping("/entrada")
-    public ResponseEntity<Movimentacao> criar(@RequestBody @Valid MovimentacaoFormDTO dadosMovimentacao, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<Movimentacao> entrada(@RequestBody @Valid MovimentacaoFormDTO dadosMovimentacao, UriComponentsBuilder uriBuilder){
         try {
             Movimentacao movimentacao = movimentacaoService.entrada(dadosMovimentacao);
+            return ResponseEntity.ok(movimentacao);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/saida")
+    public ResponseEntity<Movimentacao> saida(@RequestBody @Valid MovimentacaoFormDTO dadosMovimentacao, UriComponentsBuilder uriBuilder){
+        try {
+            Movimentacao movimentacao = movimentacaoService.saida(dadosMovimentacao);
             return ResponseEntity.ok(movimentacao);
         }catch (Exception e) {
             return ResponseEntity.badRequest().build();
