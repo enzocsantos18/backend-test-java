@@ -18,4 +18,12 @@ public class TipoVeiculo {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
