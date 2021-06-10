@@ -3,6 +3,7 @@ package br.com.estacionamento.controller;
 import br.com.estacionamento.domain.Empresa;
 import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
 import br.com.estacionamento.domain.dto.in.RelatorioFormDTO;
+import br.com.estacionamento.domain.relatorios.EntradasSaidasHorarioRelatorio;
 import br.com.estacionamento.domain.relatorios.EntradasSaidasRelatorio;
 import br.com.estacionamento.service.EmpresaService;
 import br.com.estacionamento.service.RelatorioService;
@@ -13,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 
 @RestController
@@ -33,6 +35,19 @@ public class RelatorioController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/hora")
+    public ResponseEntity<List<EntradasSaidasHorarioRelatorio>> gerarRelatorioHoraPorData(@Valid @RequestBody RelatorioFormDTO dadosRelatorio){
+        try {
+
+            List<EntradasSaidasHorarioRelatorio> relatorios = relatorioService.gerarEntradasSaidasPorHorario(dadosRelatorio);
+            return ResponseEntity.ok(relatorios);
+        }
+        catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 
 }
