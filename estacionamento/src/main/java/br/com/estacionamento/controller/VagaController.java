@@ -22,27 +22,17 @@ public class VagaController {
     public ResponseEntity<List<Vaga>> buscar(
             @PathVariable("empresa") Long empresaId,
             @PathVariable("estacionamento") Long estacionamentoId
-    ){
-        try{
-            List<Vaga> vagas = vagaService.buscar(empresaId, estacionamentoId);
-            return ResponseEntity.ok(vagas);
-        }
-        catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    ) {
+        List<Vaga> vagas = vagaService.buscar(empresaId, estacionamentoId);
+        return ResponseEntity.ok(vagas);
     }
 
     @PostMapping
-    public ResponseEntity<Vaga> adicionarVaga(@Valid @RequestBody VagaFormDTO dadosVaga){
-        try {
+    public ResponseEntity<Vaga> adicionarVaga(@RequestBody @Valid VagaFormDTO dadosVaga) {
 
-            Vaga vaga = vagaService.adicionar(dadosVaga);
+        Vaga vaga = vagaService.adicionar(dadosVaga);
 
-            return ResponseEntity.ok(vaga);
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(vaga);
     }
 
     @DeleteMapping("{empresa}/{estacionamento}/{tipoVaga}")
@@ -50,25 +40,18 @@ public class VagaController {
             @PathVariable("empresa") Long empresaId,
             @PathVariable("estacionamento") Long estacionamentoId,
             @PathVariable("tipoVaga") Long tipoVagaId
-    ){
-        try {
-            vagaService.deletar(empresaId, estacionamentoId, tipoVagaId);
-            return ResponseEntity.ok().build();
+    ) {
 
-        }catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+        vagaService.deletar(empresaId, estacionamentoId, tipoVagaId);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping
     public ResponseEntity<Vaga> atualizar(
             @RequestBody @Valid VagaFormDTO dadosVaga
-    ){
-        try{
-            Vaga vaga = vagaService.atualizar(dadosVaga);
-            return ResponseEntity.ok(vaga);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+    ) {
+
+        Vaga vaga = vagaService.atualizar(dadosVaga);
+        return ResponseEntity.ok(vaga);
     }
 }

@@ -1,7 +1,5 @@
 package br.com.estacionamento.domain;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

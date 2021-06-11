@@ -4,6 +4,8 @@ import br.com.estacionamento.domain.Estacionamento;
 import br.com.estacionamento.domain.Modelo;
 import br.com.estacionamento.domain.Veiculo;
 import br.com.estacionamento.domain.dto.in.VeiculoFormDTO;
+import br.com.estacionamento.domain.exception.DomainException;
+import br.com.estacionamento.domain.exception.DomainNotFoundException;
 import br.com.estacionamento.repository.EstacionamentoRepository;
 import br.com.estacionamento.repository.ModeloRepository;
 import br.com.estacionamento.repository.VeiculoRepository;
@@ -29,18 +31,18 @@ public class VeiculoService {
     public Veiculo criar(VeiculoFormDTO veiculoDTO) {
         Optional<Modelo> modeloEncontrado = modeloRepository.findById(veiculoDTO.getId_modelo());
         if (!modeloEncontrado.isPresent()){
-            throw new RuntimeException("Modelo não existente");
+            throw new DomainNotFoundException("Modelo não existente");
         }
 
 
         Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(veiculoDTO.getId_estacionamento());
         if (!estacionamentoEncontrado.isPresent()){
-            throw new RuntimeException("Estacionamento não existe");
+            throw new DomainNotFoundException("Estacionamento não existe");
         }
 
         Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(veiculoDTO.getPlaca(), veiculoDTO.getId_estacionamento());
         if (veiculoEncontrado.isPresent()){
-            throw new RuntimeException("Veiculo já cadastrado");
+            throw new DomainException("Veiculo já cadastrado");
         }
 
 
@@ -56,7 +58,7 @@ public class VeiculoService {
         Optional<Veiculo> veiculo = veiculoRepository.findByPlacaAndEstacionamento(placa, estacionamentoId);
 
         if (!veiculo.isPresent()){
-            throw new RuntimeException("Veiculo não encontrado");
+            throw new DomainNotFoundException("Veiculo não encontrado");
         }
 
         return veiculo.get();
@@ -68,7 +70,7 @@ public class VeiculoService {
         Optional<Veiculo> veiculo = veiculoRepository.findByPlacaAndEstacionamento(placa, estacionamentoId);
 
         if (!veiculo.isPresent()){
-            throw new RuntimeException("Veiculo não encontrado");
+            throw new DomainNotFoundException("Veiculo não encontrado");
         }
 
         veiculoRepository.delete(veiculo.get());

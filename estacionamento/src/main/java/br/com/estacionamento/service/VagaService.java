@@ -4,6 +4,8 @@ import br.com.estacionamento.domain.Estacionamento;
 import br.com.estacionamento.domain.TipoVeiculo;
 import br.com.estacionamento.domain.Vaga;
 import br.com.estacionamento.domain.dto.in.VagaFormDTO;
+import br.com.estacionamento.domain.exception.DomainException;
+import br.com.estacionamento.domain.exception.DomainNotFoundException;
 import br.com.estacionamento.repository.EstacionamentoRepository;
 import br.com.estacionamento.repository.TipoVeiculoRepository;
 import br.com.estacionamento.repository.VagaRepository;
@@ -31,12 +33,12 @@ public class VagaService {
                 dadosVaga.getEstacionamento_id());
 
         if (!estacionamentoEncontrado.isPresent()){
-            throw new RuntimeException("Estacionamento não encontrado!");
+            throw new DomainException("Estacionamento não encontrado!");
         }
 
         Optional<TipoVeiculo> tipoEncontrado = tipoVeiculoRepository.findById(dadosVaga.getTipo_id());
         if (!tipoEncontrado.isPresent()){
-            throw new RuntimeException("Tipo de veiculo não encontrado!");
+            throw new DomainException("Tipo de veiculo não encontrado!");
         }
 
 
@@ -48,7 +50,7 @@ public class VagaService {
                 dadosVaga.getTipo_id());
 
         if (temVaga.isPresent()){
-            throw new RuntimeException("Não é possível criar mais uma vaga para esse tipo");
+            throw new DomainException("Não é possível criar mais uma vaga para esse tipo");
         }
 
         Vaga vaga = dadosVaga.converterParaVaga(estacionamento, tipo);
@@ -61,13 +63,13 @@ public class VagaService {
     public void deletar(Long empresaId,Long estacionamentoId, Long tipoVagaId) {
         Optional<Vaga> vagaEncontrada = vagaRepository.findByEstacionamentoIdAndTipoId(estacionamentoId, tipoVagaId);
         if (!vagaEncontrada.isPresent()){
-            throw new RuntimeException("Vaga não encontrada");
+            throw new DomainNotFoundException("Vaga não encontrada");
         }
 
 
         Vaga vaga = vagaEncontrada.get();
         if (vaga.getEstacionamento().getEmpresa().getId() != empresaId) {
-            throw new RuntimeException("Vaga não encontrada");
+            throw new DomainNotFoundException("Vaga não encontrada");
         }
 
 
@@ -87,12 +89,12 @@ public class VagaService {
                 dadosVaga.getEstacionamento_id());
 
         if (!estacionamentoEncontrado.isPresent()){
-            throw new RuntimeException("Estacionamento não encontrado!");
+            throw new DomainNotFoundException("Estacionamento não encontrado!");
         }
 
         Optional<TipoVeiculo> tipoEncontrado = tipoVeiculoRepository.findById(dadosVaga.getTipo_id());
         if (!tipoEncontrado.isPresent()){
-            throw new RuntimeException("Tipo de veiculo não encontrado!");
+            throw new DomainNotFoundException("Tipo de veiculo não encontrado!");
         }
 
 
@@ -101,7 +103,7 @@ public class VagaService {
                 dadosVaga.getTipo_id());
 
         if (!temVaga.isPresent()){
-            throw new RuntimeException("Vaga não encontrada");
+            throw new DomainNotFoundException("Vaga não encontrada");
         }
 
         Vaga vaga = temVaga.get();

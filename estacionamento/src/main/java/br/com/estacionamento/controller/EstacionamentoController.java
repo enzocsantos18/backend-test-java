@@ -1,11 +1,8 @@
 package br.com.estacionamento.controller;
 
-import br.com.estacionamento.domain.Empresa;
 import br.com.estacionamento.domain.Estacionamento;
-import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
 import br.com.estacionamento.domain.dto.in.EstacionamentoFormDTO;
 import br.com.estacionamento.domain.dto.in.EstacionamentoFormUpdateDTO;
-import br.com.estacionamento.service.EmpresaService;
 import br.com.estacionamento.service.EstacionamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,62 +22,37 @@ public class EstacionamentoController {
     private EstacionamentoService estacionamentoService;
 
     @PostMapping
-    public ResponseEntity<Estacionamento> criar(@RequestBody @Valid EstacionamentoFormDTO dadosEstacionamento, UriComponentsBuilder uriBuilder){
-        try {
-            Estacionamento estacionamento = estacionamentoService.criar(dadosEstacionamento);
-            URI uri = uriBuilder.path("/estacionamento/{estacionamento}/{id}").buildAndExpand(dadosEstacionamento.getId_empresa(),estacionamento.getId()).toUri();
-            return ResponseEntity.created(uri).body(estacionamento);
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Estacionamento> criar(@RequestBody @Valid EstacionamentoFormDTO dadosEstacionamento, UriComponentsBuilder uriBuilder) {
+        Estacionamento estacionamento = estacionamentoService.criar(dadosEstacionamento);
+        URI uri = uriBuilder.path("/estacionamento/{estacionamento}/{id}").buildAndExpand(dadosEstacionamento.getId_empresa(), estacionamento.getId()).toUri();
+        return ResponseEntity.created(uri).body(estacionamento);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<Estacionamento>> listagemPorEmpresa(@PathVariable("id") Long empresaId){
-        try {
-            List<Estacionamento> listagem = estacionamentoService.listagem(empresaId);
-            return ResponseEntity.ok(listagem);
-        }
-        catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<List<Estacionamento>> listagemPorEmpresa(@PathVariable("id") Long empresaId) {
+        List<Estacionamento> listagem = estacionamentoService.listagem(empresaId);
+        return ResponseEntity.ok(listagem);
     }
 
     @GetMapping("/{empresa}/{id}")
-    public ResponseEntity<Estacionamento> buscarPorId(@PathVariable("empresa") Long empresaId, @PathVariable("id") Long estacionamentoId)
-    {
-        try {
-            Estacionamento estacionamento = estacionamentoService.buscar(empresaId, estacionamentoId);
-            return ResponseEntity.ok(estacionamento);
-        }
-        catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Estacionamento> buscarPorId(@PathVariable("empresa") Long empresaId, @PathVariable("id") Long estacionamentoId) {
+        Estacionamento estacionamento = estacionamentoService.buscar(empresaId, estacionamentoId);
+        return ResponseEntity.ok(estacionamento);
     }
 
     @DeleteMapping("/{empresa}/{id}")
     public ResponseEntity deletar(@PathVariable("empresa") Long empresaId,
-                                  @PathVariable("id") Long estacionamentoId){
-        try {
-            estacionamentoService.deletar(empresaId, estacionamentoId);
-            return ResponseEntity.ok().build();
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+                                  @PathVariable("id") Long estacionamentoId) {
+        estacionamentoService.deletar(empresaId, estacionamentoId);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{empresa}/{id}")
     public ResponseEntity<Estacionamento> atualizar(@PathVariable("empresa") Long empresaId,
-                                  @PathVariable("id") Long estacionamentoId,
-                                    @RequestBody EstacionamentoFormUpdateDTO dadosEstacionamento
-    ){
-        try {
-            Estacionamento estacionamento = estacionamentoService.atualizar(empresaId, estacionamentoId,dadosEstacionamento );
-            return ResponseEntity.ok(estacionamento);
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+                                                    @PathVariable("id") Long estacionamentoId,
+                                                    @RequestBody @Valid EstacionamentoFormUpdateDTO dadosEstacionamento
+    ) {
+        Estacionamento estacionamento = estacionamentoService.atualizar(empresaId, estacionamentoId, dadosEstacionamento);
+        return ResponseEntity.ok(estacionamento);
     }
 }

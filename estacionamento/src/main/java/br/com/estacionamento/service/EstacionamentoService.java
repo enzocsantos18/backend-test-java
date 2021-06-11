@@ -4,6 +4,8 @@ import br.com.estacionamento.domain.Empresa;
 import br.com.estacionamento.domain.Estacionamento;
 import br.com.estacionamento.domain.dto.in.EstacionamentoFormDTO;
 import br.com.estacionamento.domain.dto.in.EstacionamentoFormUpdateDTO;
+import br.com.estacionamento.domain.exception.DomainException;
+import br.com.estacionamento.domain.exception.DomainNotFoundException;
 import br.com.estacionamento.repository.EmpresaRepository;
 import br.com.estacionamento.repository.EstacionamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class EstacionamentoService {
     public Estacionamento criar(EstacionamentoFormDTO dadosEstacionamento){
         Optional<Empresa> empresaEncotrada = empresaRepository.findById(dadosEstacionamento.getId_empresa());
         if (!empresaEncotrada.isPresent()){
-            throw new RuntimeException("Empresa não encontrada");
+            throw new DomainNotFoundException("Empresa não encontrada");
         }
 
         Estacionamento estacionamento = dadosEstacionamento.converterParaEstacionamento(empresaEncotrada.get());
@@ -47,7 +49,7 @@ public class EstacionamentoService {
         Optional<Estacionamento> estacionamento = estacionamentoRepository.findByEmpresaIdAndId(empresaId, estacionamentoID);
 
         if (!estacionamento.isPresent()){
-            throw new RuntimeException("Estacionamento não existe");
+            throw new DomainNotFoundException("Estacionamento não encontrado");
         }
 
         return estacionamento.get();
@@ -57,7 +59,7 @@ public class EstacionamentoService {
         Optional<Estacionamento> estacionamento = estacionamentoRepository.findByEmpresaIdAndId(empresaId, estacionamentoId);
 
         if (!estacionamento.isPresent()){
-            throw new RuntimeException("Estacionamento não existe");
+            throw new DomainNotFoundException("Estacionamento não encontrado");
         }
 
         estacionamentoRepository.delete(estacionamento.get());
@@ -68,7 +70,7 @@ public class EstacionamentoService {
         Optional<Estacionamento> estacionamento = estacionamentoRepository.findByEmpresaIdAndId(empresaId, estacionamentoId);
 
         if (!estacionamento.isPresent()){
-            throw new RuntimeException("Estacionamento não existe");
+            throw new DomainNotFoundException("Estacionamento não encontrado");
         }
 
         Estacionamento estacionamentoEncontrado = estacionamento.get();

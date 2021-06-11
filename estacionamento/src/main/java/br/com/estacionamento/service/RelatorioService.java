@@ -1,6 +1,7 @@
 package br.com.estacionamento.service;
 
 import br.com.estacionamento.domain.dto.in.RelatorioFormDTO;
+import br.com.estacionamento.domain.exception.DomainException;
 import br.com.estacionamento.domain.relatorios.EntradasSaidasHorarioRelatorio;
 import br.com.estacionamento.domain.relatorios.EntradasSaidasRelatorio;
 import br.com.estacionamento.repository.MovimentacaoRepository;
@@ -24,7 +25,7 @@ public class RelatorioService {
             Long estacionamentoId = dadosRelatorio.getId_estacionamento();
 
             if (dataFinal.before(dataInicial)){
-                throw new RuntimeException("Data inicial maior que data final");
+                throw new DomainException("Data inicial maior que data final");
             }
 
             EntradasSaidasRelatorio relatorio = movimentacaoRepository
@@ -34,7 +35,7 @@ public class RelatorioService {
                             estacionamentoId);
             return  relatorio;
         }catch (Exception e){
-            throw new RuntimeException();
+            throw new DomainException("Confira novamente os dados fornecidos");
         }
     }
     public List<EntradasSaidasHorarioRelatorio> gerarEntradasSaidasPorHorario(RelatorioFormDTO dadosRelatorio){
@@ -45,7 +46,7 @@ public class RelatorioService {
             Long estacionamentoId = dadosRelatorio.getId_estacionamento();
 
             if (dataFinal.before(dataInicial)){
-                throw new RuntimeException("Data inicial maior que data final");
+                throw new DomainException("Data inicial maior que data final");
             }
 
             List<EntradasSaidasHorarioRelatorio> relatorios = movimentacaoRepository
@@ -55,7 +56,7 @@ public class RelatorioService {
                             estacionamentoId);
             return  relatorios;
         }catch (Exception e){
-            throw new RuntimeException();
+            throw new DomainException("Confira novamente os dados fornecidos");
         }
     }
 }

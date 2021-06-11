@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 public class EstacionamentoFormDTO {
     @NotNull @NotEmpty
     private String nome;
-    @Min(1)
+    @NotNull  @Min(1)
     private Long id_empresa;
 
 

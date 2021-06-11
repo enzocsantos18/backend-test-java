@@ -2,7 +2,6 @@ package br.com.estacionamento.service;
 
 import br.com.estacionamento.domain.Endereco;
 import br.com.estacionamento.domain.ViaCepResponse;
-import br.com.estacionamento.domain.dto.out.EnderecoDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 

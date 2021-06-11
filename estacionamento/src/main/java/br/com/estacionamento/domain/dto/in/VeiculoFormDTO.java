@@ -10,13 +10,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class VeiculoFormDTO {
-    @NotNull @NotEmpty @Pattern(regexp = "^[a-zA-Z]{3}[0-9][A-Za-z0-9][0-9]{2}$")
+    @Pattern(regexp = "^[a-zA-Z]{3}[0-9][A-Za-z0-9][0-9]{2}$", message = "O campo placa deve seguir o padrão ABC1234")
     private String placa;
     @NotNull @NotEmpty
     private String cor;
-    @Min(1) 
+    @NotNull  @Min(1)
     private Long id_modelo;
-    @Min(1)
+    @NotNull  @Min(1)
     private Long id_estacionamento;
 
     public String getPlaca() {

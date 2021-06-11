@@ -2,14 +2,13 @@ package br.com.estacionamento.service;
 
 import br.com.estacionamento.domain.*;
 import br.com.estacionamento.domain.dto.in.MovimentacaoFormDTO;
-import br.com.estacionamento.domain.dto.in.VagaFormDTO;
+import br.com.estacionamento.domain.exception.DomainException;
+import br.com.estacionamento.domain.exception.DomainNotFoundException;
 import br.com.estacionamento.repository.*;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,7 +25,7 @@ public class MovimentacaoService {
     public Movimentacao entrada(MovimentacaoFormDTO dadosMovimentacao) {
         Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(dadosMovimentacao.getPlaca(), dadosMovimentacao.getId_estacionamento());
         if (!veiculoEncontrado.isPresent()){
-            throw new RuntimeException("Veiculo não encontrado");
+            throw new DomainNotFoundException("Veiculo não encontrado");
         }
 
         Veiculo veiculo = veiculoEncontrado.get();
@@ -39,7 +38,7 @@ public class MovimentacaoService {
 
 
         if (verificarMovimentacao.isPresent() && verificarMovimentacao.get().getSaida() == null){
-            throw new RuntimeException("O veículo ainda não deu saída");
+            throw new DomainException("O veículo ainda não deu saída");
         }
 
 
@@ -53,11 +52,11 @@ public class MovimentacaoService {
 
 
         if (!vaga.isPresent()){
-            throw new RuntimeException("Vaga não existe");
+            throw new DomainNotFoundException("Vaga não existe");
         }
 
         if (vaga.get().getQuantidade().longValue() == quantidadeDeMovimentacoes){
-            throw new RuntimeException("Vagas cheias");
+            throw new DomainException("Vagas cheias");
         }
 
         Movimentacao movimentacao = new Movimentacao();
@@ -74,7 +73,7 @@ public class MovimentacaoService {
     public Movimentacao saida(MovimentacaoFormDTO dadosMovimentacao) {
         Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(dadosMovimentacao.getPlaca(), dadosMovimentacao.getId_estacionamento());
         if (!veiculoEncontrado.isPresent()){
-            throw new RuntimeException("Veiculo não encontrado");
+            throw new DomainNotFoundException("Veiculo não encontrado");
         }
 
         Veiculo veiculo = veiculoEncontrado.get();
@@ -87,7 +86,7 @@ public class MovimentacaoService {
 
 
         if (verificarMovimentacao.isPresent() && verificarMovimentacao.get().getSaida() != null){
-            throw new RuntimeException("O veículo já deu saída");
+            throw new DomainException("O veículo já deu saída");
         }
         Movimentacao movimentacao = verificarMovimentacao.get();
 

@@ -1,6 +1,5 @@
 package br.com.estacionamento.repository;
 
-import br.com.estacionamento.domain.Telefone;
 import br.com.estacionamento.domain.Vaga;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

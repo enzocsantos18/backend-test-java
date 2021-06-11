@@ -1,6 +1,5 @@
 package br.com.estacionamento.repository;
 
-import br.com.estacionamento.domain.Empresa;
 import br.com.estacionamento.domain.Veiculo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

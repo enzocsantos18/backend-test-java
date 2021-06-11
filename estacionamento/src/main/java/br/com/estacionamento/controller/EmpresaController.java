@@ -1,13 +1,10 @@
 package br.com.estacionamento.controller;
 
 import br.com.estacionamento.domain.Empresa;
-import br.com.estacionamento.domain.Endereco;
 import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
-import br.com.estacionamento.domain.dto.in.EmpresaFormUpdateDTO;
 import br.com.estacionamento.service.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,36 +20,22 @@ public class EmpresaController {
     private EmpresaService empresaService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Empresa> buscar(@PathVariable("id") Long id){
-        try {
-
-            Empresa empresa = empresaService.buscarPorId(id);
-            return ResponseEntity.ok(empresa);
-        }
-        catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Empresa> buscar(@PathVariable("id") Long id) {
+        Empresa empresa = empresaService.buscarPorId(id);
+        return ResponseEntity.ok(empresa);
     }
 
     @PostMapping
-    public ResponseEntity<Empresa> criar(@RequestBody @Valid  EmpresaFormDTO dadosEmpresa, UriComponentsBuilder uriBuilder){
-        try {
-            Empresa empresa = empresaService.criar(dadosEmpresa);
-            URI uri = uriBuilder.path("/empresa/{id}").buildAndExpand(empresa.getId()).toUri();
-            return ResponseEntity.created(uri).body(empresa);
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Empresa> criar(@Valid @RequestBody EmpresaFormDTO dadosEmpresa, UriComponentsBuilder uriBuilder) {
+        Empresa empresa = empresaService.criar(dadosEmpresa);
+        URI uri = uriBuilder.path("/empresa/{id}").buildAndExpand(empresa.getId()).toUri();
+        return ResponseEntity.created(uri).body(empresa);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deletar(@PathVariable("id") Long id){
-        try{
-            empresaService.deletarPorId(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity deletar(@PathVariable("id") Long id) {
+        empresaService.deletarPorId(id);
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -1,24 +1,20 @@
 package br.com.estacionamento.domain.dto.in;
 
-
 import br.com.estacionamento.domain.Estacionamento;
 import br.com.estacionamento.domain.TipoVeiculo;
 import br.com.estacionamento.domain.Vaga;
 
 import javax.validation.constraints.Min;
-
-
-
-
+import javax.validation.constraints.NotNull;
 
 public class VagaFormDTO {
-    @Min(1)
+    @NotNull  @Min(1)
     private Long empresa_id;
-    @Min(1)
+    @NotNull  @Min(1)
     private Long estacionamento_id;
-    @Min(1)
+    @NotNull  @Min(1)
     private Long tipo_id;
-    @Min(1)
+    @NotNull  @Min(1)
     private Integer quantidade;
 
     public Long getEstacionamento_id() {

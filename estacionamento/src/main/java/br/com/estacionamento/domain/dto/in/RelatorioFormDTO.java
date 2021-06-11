@@ -8,13 +8,13 @@ import javax.validation.constraints.Pattern;
 public class RelatorioFormDTO {
     @NotNull
     @NotEmpty
-    @Pattern(regexp = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")
+    @Pattern(regexp = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))", message = "O campo deve seguir o padrão AAAA-MM-DD")
     private String dt_inicial;
     @NotNull
     @NotEmpty
-    @Pattern(regexp = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")
+    @Pattern(regexp = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))", message = "O campo deve seguir o padrão AAAA-MM-DD")
     private String dt_final;
-    @Min(1)
+    @NotNull  @Min(1)
     private Long id_estacionamento;
 
     public String getDt_inicial() {

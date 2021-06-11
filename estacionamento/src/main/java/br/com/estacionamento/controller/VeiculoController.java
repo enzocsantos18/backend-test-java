@@ -23,42 +23,30 @@ public class VeiculoController {
     public ResponseEntity<Veiculo> buscar(
             @PathVariable("placa") String placa,
             @PathVariable("estacionamento") Long estacionamento
-    ){
-        try {
-
-            Veiculo veiculo = veiculoService.buscarPelaPlaca(placa, estacionamento);
-            return ResponseEntity.ok(veiculo);
-        }
-        catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    ) {
+        Veiculo veiculo = veiculoService.buscarPelaPlaca(placa, estacionamento);
+        return ResponseEntity.ok(veiculo);
     }
 
     @PostMapping
     public ResponseEntity<Veiculo> criar(
             @RequestBody @Valid VeiculoFormDTO dadosVeiculo,
             UriComponentsBuilder uriBuilder
-    ){
-        try {
-            Veiculo veiculo = veiculoService.criar(dadosVeiculo);
-            URI uri = uriBuilder.path("/veiculo/{id}").buildAndExpand(veiculo.getId()).toUri();
-            return ResponseEntity.created(uri).body(veiculo);
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    ) {
+
+        Veiculo veiculo = veiculoService.criar(dadosVeiculo);
+        URI uri = uriBuilder.path("/veiculo/{id}").buildAndExpand(veiculo.getId()).toUri();
+        return ResponseEntity.created(uri).body(veiculo);
+
     }
 
     @DeleteMapping("/{estacionamento}/{placa}")
     public ResponseEntity deletar(
             @PathVariable("placa") String placa,
             @PathVariable("estacionamento") Long estacionamento
-    ){
-        try {
-            veiculoService.deletarPelaPlaca(placa, estacionamento);
-            return ResponseEntity.ok().build();
-        }catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    ) {
+        veiculoService.deletarPelaPlaca(placa, estacionamento);
+        return ResponseEntity.ok().build();
     }
 
 }
