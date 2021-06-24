@@ -1,7 +1,7 @@
 package br.com.estacionamento.domain.dto.in;
 
-import br.com.estacionamento.domain.Empresa;
-import br.com.estacionamento.domain.Telefone;
+import br.com.estacionamento.domain.empresa.Empresa;
+import br.com.estacionamento.domain.empresa.Telefone;
 
 import javax.validation.constraints.*;
 

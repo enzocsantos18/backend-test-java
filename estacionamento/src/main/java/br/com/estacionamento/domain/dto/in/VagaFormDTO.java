@@ -1,29 +1,18 @@
 package br.com.estacionamento.domain.dto.in;
 
-import br.com.estacionamento.domain.Estacionamento;
-import br.com.estacionamento.domain.TipoVeiculo;
-import br.com.estacionamento.domain.Vaga;
+import br.com.estacionamento.domain.estacionamento.Estacionamento;
+import br.com.estacionamento.domain.estacionamento.Vaga;
+import br.com.estacionamento.domain.veiculo.TipoVeiculo;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class VagaFormDTO {
     @NotNull  @Min(1)
-    private Long empresa_id;
-    @NotNull  @Min(1)
-    private Long estacionamento_id;
-    @NotNull  @Min(1)
     private Long tipo_id;
     @NotNull  @Min(1)
     private Integer quantidade;
 
-    public Long getEstacionamento_id() {
-        return estacionamento_id;
-    }
-
-    public void setEstacionamento_id(Long estacionamento_id) {
-        this.estacionamento_id = estacionamento_id;
-    }
 
     public Long getTipo_id() {
         return tipo_id;
@@ -39,14 +28,6 @@ public class VagaFormDTO {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
-    }
-
-    public Long getEmpresa_id() {
-        return empresa_id;
-    }
-
-    public void setEmpresa_id(Long empresa_id) {
-        this.empresa_id = empresa_id;
     }
 
     public Vaga converterParaVaga(Estacionamento estacionamento, TipoVeiculo tipo){

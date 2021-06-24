@@ -1,10 +1,12 @@
 package br.com.estacionamento.controller;
 
-import br.com.estacionamento.domain.Empresa;
+import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
-import br.com.estacionamento.service.EmpresaService;
+import br.com.estacionamento.service.empresa.EmpresaService;
+import br.com.estacionamento.service.security.UserInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,9 +21,13 @@ public class EmpresaController {
     @Autowired
     private EmpresaService empresaService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Empresa> buscar(@PathVariable("id") Long id) {
-        Empresa empresa = empresaService.buscarPorId(id);
+    @Autowired
+    private UserInformationService userInformationService;
+
+    @GetMapping
+    public ResponseEntity<Empresa> buscar(Authentication authentication) {
+        Long empresaId = userInformationService.getEmpresaId(authentication);
+        Empresa empresa = empresaService.buscarPorId(empresaId);
         return ResponseEntity.ok(empresa);
     }
 
@@ -32,9 +38,10 @@ public class EmpresaController {
         return ResponseEntity.created(uri).body(empresa);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deletar(@PathVariable("id") Long id) {
-        empresaService.deletarPorId(id);
+    @DeleteMapping
+    public ResponseEntity deletar(Authentication authentication) {
+        Long empresaId = userInformationService.getEmpresaId(authentication);
+        empresaService.deletarPorId(empresaId);
         return ResponseEntity.ok().build();
     }
 

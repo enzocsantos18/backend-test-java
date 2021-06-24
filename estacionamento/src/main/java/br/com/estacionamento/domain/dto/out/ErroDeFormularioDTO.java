@@ -2,9 +2,7 @@ package br.com.estacionamento.domain.dto.out;
 
 import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class ErroDeFormularioDTO {
 

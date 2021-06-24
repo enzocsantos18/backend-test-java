@@ -1,10 +1,12 @@
 package br.com.estacionamento.controller;
 
-import br.com.estacionamento.domain.Vaga;
+import br.com.estacionamento.domain.estacionamento.Vaga;
 import br.com.estacionamento.domain.dto.in.VagaFormDTO;
-import br.com.estacionamento.service.VagaService;
+import br.com.estacionamento.service.estacionamento.VagaService;
+import br.com.estacionamento.service.security.UserInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,40 +20,44 @@ public class VagaController {
     @Autowired
     private VagaService vagaService;
 
-    @GetMapping("{empresa}/{estacionamento}")
-    public ResponseEntity<List<Vaga>> buscar(
-            @PathVariable("empresa") Long empresaId,
-            @PathVariable("estacionamento") Long estacionamentoId
-    ) {
-        List<Vaga> vagas = vagaService.buscar(empresaId, estacionamentoId);
+    @Autowired
+    private UserInformationService userInformationService;
+
+    @GetMapping
+    public ResponseEntity<List<Vaga>> buscar(Authentication authentication) {
+        Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
+
+        List<Vaga> vagas = vagaService.buscar(estacionamentoId);
         return ResponseEntity.ok(vagas);
     }
 
     @PostMapping
-    public ResponseEntity<Vaga> adicionarVaga(@RequestBody @Valid VagaFormDTO dadosVaga) {
+    public ResponseEntity<Vaga> adicionarVaga(@RequestBody @Valid VagaFormDTO dadosVaga, Authentication authentication) {
+        Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
 
-        Vaga vaga = vagaService.adicionar(dadosVaga);
+        Vaga vaga = vagaService.adicionar(dadosVaga, estacionamentoId);
 
         return ResponseEntity.ok(vaga);
     }
 
-    @DeleteMapping("{empresa}/{estacionamento}/{tipoVaga}")
+    @DeleteMapping("/{tipoVaga}")
     public ResponseEntity deletar(
-            @PathVariable("empresa") Long empresaId,
-            @PathVariable("estacionamento") Long estacionamentoId,
-            @PathVariable("tipoVaga") Long tipoVagaId
+            @PathVariable("tipoVaga") Long tipoVagaId,
+            Authentication authentication
     ) {
-
-        vagaService.deletar(empresaId, estacionamentoId, tipoVagaId);
+        Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
+        vagaService.deletar(estacionamentoId, tipoVagaId);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping
     public ResponseEntity<Vaga> atualizar(
-            @RequestBody @Valid VagaFormDTO dadosVaga
+            @RequestBody @Valid VagaFormDTO dadosVaga,
+            Authentication authentication
     ) {
+        Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
 
-        Vaga vaga = vagaService.atualizar(dadosVaga);
+        Vaga vaga = vagaService.atualizar(dadosVaga, estacionamentoId);
         return ResponseEntity.ok(vaga);
     }
 }
