@@ -40,16 +40,6 @@ public class VagaController {
         return ResponseEntity.ok(vaga);
     }
 
-    @DeleteMapping("/{tipoVaga}")
-    public ResponseEntity deletar(
-            @PathVariable("tipoVaga") Long tipoVagaId,
-            Authentication authentication
-    ) {
-        Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-        vagaService.deletar(estacionamentoId, tipoVagaId);
-        return ResponseEntity.ok().build();
-    }
-
     @PutMapping
     public ResponseEntity<Vaga> atualizar(
             @RequestBody @Valid VagaFormDTO dadosVaga,
@@ -60,4 +50,16 @@ public class VagaController {
         Vaga vaga = vagaService.atualizar(dadosVaga, estacionamentoId);
         return ResponseEntity.ok(vaga);
     }
+
+    @DeleteMapping("/{tipoVaga}")
+    public ResponseEntity deletar(
+            @PathVariable("tipoVaga") Long tipoVagaId,
+            Authentication authentication
+    ) {
+        Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
+        vagaService.deletar(estacionamentoId, tipoVagaId);
+        return ResponseEntity.ok().build();
+    }
+
+
 }

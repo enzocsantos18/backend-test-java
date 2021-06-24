@@ -26,14 +26,6 @@ public class EstacionamentoController {
     @Autowired
     private UserInformationService userInformationService;
 
-    @PostMapping
-    public ResponseEntity<Estacionamento> criar(@RequestBody @Valid EstacionamentoFormDTO dadosEstacionamento, Authentication authentication, UriComponentsBuilder uriBuilder) {
-        Long empresaId = userInformationService.getEmpresaId(authentication);
-        Estacionamento estacionamento = estacionamentoService.criar(dadosEstacionamento, empresaId);
-        URI uri = uriBuilder.path("/estacionamento/{id}").buildAndExpand(estacionamento.getId()).toUri();
-        return ResponseEntity.created(uri).body(estacionamento);
-    }
-
     @GetMapping
     public ResponseEntity<List<Estacionamento>> listagemPorEmpresa(Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
@@ -42,9 +34,29 @@ public class EstacionamentoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estacionamento> buscarPorId(@PathVariable("id") Long estacionamentoId, Authentication authentication) {
+    public ResponseEntity<Estacionamento> buscarPorId(@PathVariable("id") Long estacionamentoId,
+                                                      Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
         Estacionamento estacionamento = estacionamentoService.buscar(empresaId, estacionamentoId);
+        return ResponseEntity.ok(estacionamento);
+    }
+
+    @PostMapping
+    public ResponseEntity<Estacionamento> criar(@RequestBody @Valid EstacionamentoFormDTO dadosEstacionamento,
+                                                Authentication authentication,
+                                                UriComponentsBuilder uriBuilder) {
+        Long empresaId = userInformationService.getEmpresaId(authentication);
+        Estacionamento estacionamento = estacionamentoService.criar(dadosEstacionamento, empresaId);
+        URI uri = uriBuilder.path("/estacionamento/{id}").buildAndExpand(estacionamento.getId()).toUri();
+        return ResponseEntity.created(uri).body(estacionamento);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Estacionamento> atualizar(@PathVariable("id") Long estacionamentoId,
+                                                    @RequestBody @Valid EstacionamentoFormUpdateDTO dadosEstacionamento,
+                                                    Authentication authentication
+    ) {
+        Long empresaId = userInformationService.getEmpresaId(authentication);
+        Estacionamento estacionamento = estacionamentoService.atualizar(empresaId, estacionamentoId, dadosEstacionamento);
         return ResponseEntity.ok(estacionamento);
     }
 
@@ -55,13 +67,5 @@ public class EstacionamentoController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Estacionamento> atualizar(@PathVariable("id") Long estacionamentoId,
-                                                    @RequestBody @Valid EstacionamentoFormUpdateDTO dadosEstacionamento,
-                                                    Authentication authentication
-    ) {
-        Long empresaId = userInformationService.getEmpresaId(authentication);
-        Estacionamento estacionamento = estacionamentoService.atualizar(empresaId, estacionamentoId, dadosEstacionamento);
-        return ResponseEntity.ok(estacionamento);
-    }
+
 }

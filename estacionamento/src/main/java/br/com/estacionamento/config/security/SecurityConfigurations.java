@@ -1,5 +1,6 @@
 package br.com.estacionamento.config.security;
 
+import br.com.estacionamento.controller.RelatorioController;
 import br.com.estacionamento.repository.usuario.UsuarioRepository;
 import br.com.estacionamento.service.security.AutenticacaoService;
 import br.com.estacionamento.service.security.TokenService;
@@ -50,18 +51,27 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
-                .antMatchers(HttpMethod.POST, "/movimentacao/*").hasAnyAuthority("funcionario")
-                .antMatchers(HttpMethod.GET, "/relatorio").hasAnyAuthority("admin_estacionamento")
-                .antMatchers(HttpMethod.GET, "/relatorio/*").hasAnyAuthority("admin_estacionamento")
-                .antMatchers("/vaga").hasAnyAuthority("admin_estacionamento")
-                .antMatchers("/vaga/**").hasAnyAuthority("admin_estacionamento")
-                .antMatchers("/estacionamento").hasAnyAuthority("admin")
-                .antMatchers("/estacionamento/**").hasAnyAuthority("admin")
-                .antMatchers(HttpMethod.GET, "/estacionamento/**").hasAnyAuthority("admin_estacionamento")
-                .antMatchers(HttpMethod.PUT, "/estacionamento/**").hasAnyAuthority("admin_estacionamento")
-                .antMatchers(HttpMethod.GET, "/empresa/**").hasAnyAuthority("admin")
+                .antMatchers(HttpMethod.POST, "/empresa").permitAll()
+                .antMatchers(HttpMethod.GET, "/empresa").hasAnyAuthority("admin")
+                .antMatchers(HttpMethod.POST, "/empresa").hasAnyAuthority("admin")
                 .antMatchers(HttpMethod.DELETE, "/empresa").hasAnyAuthority("admin")
-                .anyRequest().authenticated()
+                .antMatchers(HttpMethod.POST, "/estacionamento").hasAnyAuthority("admin")
+                .antMatchers(HttpMethod.DELETE, "/estacionamento").hasAnyAuthority("admin")
+                .antMatchers(HttpMethod.GET, "/estacionamento").hasAnyAuthority("admin")
+
+                .antMatchers(HttpMethod.GET, "/estacionamento/**").hasAnyAuthority("admin", "admin_estacionamento")
+                .antMatchers(HttpMethod.PUT, "/estacionamento/**").hasAnyAuthority("admin", "admin_estacionamento")
+
+                .antMatchers(HttpMethod.GET, "/relatorio").hasAnyAuthority("admin_estacionamento")
+                .antMatchers(HttpMethod.GET, "/relatorio/**").hasAnyAuthority("admin_estacionamento")
+                .antMatchers(HttpMethod.POST,"/vaga").hasAnyAuthority("admin_estacionamento")
+                .antMatchers(HttpMethod.PUT,"/vaga").hasAnyAuthority("admin_estacionamento")
+                .antMatchers(HttpMethod.DELETE, "/vaga/**").hasAnyAuthority("admin_estacionamento")
+
+                .antMatchers(HttpMethod.GET,"/vaga").hasAnyAuthority("admin_estacionamento","funcionario")
+                .antMatchers(HttpMethod.POST, "/movimentacao/**").hasAnyAuthority( "admin_estacionamento", "funcionario")
+                .antMatchers( "/veiculo").hasAnyAuthority( "admin_estacionamento", "funcionario")
+                .antMatchers( "/veiculo/**").hasAnyAuthority( "admin_estacionamento", "funcionario")
                 .and().csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
