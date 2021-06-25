@@ -1,8 +1,11 @@
 package br.com.estacionamento.domain.veiculo;
 
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
+import br.com.estacionamento.domain.estacionamento.Movimentacao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Veiculo {
@@ -13,7 +16,9 @@ public class Veiculo {
     private String cor;
     @ManyToOne
     private Modelo modelo;
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "veiculo", cascade = CascadeType.REMOVE)
+    private List<Movimentacao> movimentacoes;
     @ManyToOne
     private Estacionamento estacionamento;
 

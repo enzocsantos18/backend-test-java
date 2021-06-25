@@ -1,12 +1,14 @@
 package br.com.estacionamento.service.veiculo;
 
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
+import br.com.estacionamento.domain.estacionamento.Movimentacao;
 import br.com.estacionamento.domain.veiculo.Modelo;
 import br.com.estacionamento.domain.veiculo.Veiculo;
 import br.com.estacionamento.domain.dto.in.VeiculoFormDTO;
 import br.com.estacionamento.config.exception.DomainException;
 import br.com.estacionamento.config.exception.DomainNotFoundException;
 import br.com.estacionamento.repository.estacionamento.EstacionamentoRepository;
+import br.com.estacionamento.repository.estacionamento.MovimentacaoRepository;
 import br.com.estacionamento.repository.veiculo.ModeloRepository;
 import br.com.estacionamento.repository.veiculo.VeiculoRepository;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +29,9 @@ public class VeiculoService {
 
     @Autowired
     private EstacionamentoRepository estacionamentoRepository;
+
+    @Autowired
+    private MovimentacaoRepository movimentacaoRepository;
 
     public Veiculo buscarPelaPlaca(String placa, long estacionamentoId){
         Veiculo veiculo = getVeiculo(placa, estacionamentoId);
@@ -54,7 +59,18 @@ public class VeiculoService {
     public void deletarPelaPlaca(String placa, long estacionamentoId){
         Veiculo veiculo = getVeiculo(placa, estacionamentoId);
 
+        verificarSeEstaNoPatio(placa, estacionamentoId);
+
         veiculoRepository.delete(veiculo);
+    }
+
+    private void verificarSeEstaNoPatio(String placa, Long estacionamentoId) {
+        Optional<Movimentacao> movimentacao = movimentacaoRepository.findFirstByVeiculoPlacaAndVeiculoEstacionamentoIdOrderByIdDesc(placa, estacionamentoId);
+
+        if (movimentacao.isPresent() && movimentacao.get().getSaida() == null){
+            throw new DomainException("O veiculo não deu saída");
+        }
+
     }
 
     private Estacionamento getEstacionamento(Long estacionamentoId) {
