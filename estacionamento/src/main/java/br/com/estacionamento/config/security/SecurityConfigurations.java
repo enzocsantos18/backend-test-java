@@ -1,6 +1,5 @@
 package br.com.estacionamento.config.security;
 
-import br.com.estacionamento.controller.RelatorioController;
 import br.com.estacionamento.repository.usuario.UsuarioRepository;
 import br.com.estacionamento.service.security.AutenticacaoService;
 import br.com.estacionamento.service.security.TokenService;
@@ -53,6 +52,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .antMatchers(HttpMethod.GET, "/tipo/veiculo").permitAll()
                 .antMatchers(HttpMethod.GET, "/tipo/usuario").permitAll()
+                .antMatchers(HttpMethod.GET, "/fabricante").permitAll()
+                .antMatchers(HttpMethod.GET, "/modelo").permitAll()
                 .antMatchers(HttpMethod.POST, "/empresa").permitAll()
                 .antMatchers(HttpMethod.GET, "/empresa").hasAnyAuthority("admin")
                 .antMatchers(HttpMethod.PUT, "/empresa").hasAnyAuthority("admin")
