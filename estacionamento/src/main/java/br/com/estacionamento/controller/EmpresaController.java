@@ -1,5 +1,6 @@
 package br.com.estacionamento.controller;
 
+import br.com.estacionamento.domain.dto.in.EmpresaFormUpdateDTO;
 import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
 import br.com.estacionamento.service.empresa.EmpresaService;
@@ -24,6 +25,7 @@ public class EmpresaController {
     @Autowired
     private UserInformationService userInformationService;
 
+
     @GetMapping
     public ResponseEntity<Empresa> buscar(Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
@@ -36,6 +38,14 @@ public class EmpresaController {
         Empresa empresa = empresaService.criar(dadosEmpresa);
         URI uri = uriBuilder.path("/empresa/{id}").buildAndExpand(empresa.getId()).toUri();
         return ResponseEntity.created(uri).body(empresa);
+    }
+
+    @PutMapping
+    public ResponseEntity<Empresa> atualizar(@Valid @RequestBody EmpresaFormUpdateDTO dadosEmpresa, Authentication authentication) {
+        Long empresaId = userInformationService.getEmpresaId(authentication);
+
+        Empresa empresa = empresaService.atualizar(dadosEmpresa,empresaId);
+        return ResponseEntity.ok(empresa);
     }
 
     @DeleteMapping

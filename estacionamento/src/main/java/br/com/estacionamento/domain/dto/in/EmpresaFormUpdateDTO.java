@@ -13,8 +13,6 @@ public class EmpresaFormUpdateDTO {
     private String nome;
     @Pattern(regexp = "^\\d{2}\\.\\d{3}\\.\\d{3}\\/\\d{4}\\-\\d{2}$", message = "O campo cnpj deve seguir o padrão XX.XXX.XXX/XXXX-XX")
     private String cnpj;
-    @Pattern(regexp = "^\\([1-9]{2}\\) [0-9]{4,5}-[0-9]{4}$", message = "O campo telefone de seguir o padrão (XX) XXXX-XXXX")
-    private String telefone;
     @Pattern(regexp = "^\\d{5}-\\d{3}$", message = "O campo cep deve seguir o padrão XXXXX-XXX")
     private String cep;
     @NotNull  @Min(1)
@@ -36,14 +34,6 @@ public class EmpresaFormUpdateDTO {
         this.cnpj = cnpj;
     }
 
-    public Telefone getTelefone() {
-        return new Telefone(this.telefone);
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
     public String getCep() {
         return cep;
     }
@@ -61,8 +51,7 @@ public class EmpresaFormUpdateDTO {
     }
 
 
-    public Empresa converterParaEmpresa(){
-        Empresa empresa = new Empresa();
+    public Empresa converterParaEmpresa(Empresa empresa){
         empresa.setNome(this.nome);
         empresa.setCnpj(this.cnpj);
 
