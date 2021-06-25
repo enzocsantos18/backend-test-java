@@ -53,14 +53,13 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/empresa").permitAll()
                 .antMatchers(HttpMethod.GET, "/empresa").hasAnyAuthority("admin")
-                .antMatchers(HttpMethod.POST, "/empresa").hasAnyAuthority("admin")
                 .antMatchers(HttpMethod.DELETE, "/empresa").hasAnyAuthority("admin")
                 .antMatchers(HttpMethod.POST, "/estacionamento").hasAnyAuthority("admin")
                 .antMatchers(HttpMethod.DELETE, "/estacionamento").hasAnyAuthority("admin")
                 .antMatchers(HttpMethod.GET, "/estacionamento").hasAnyAuthority("admin")
+                .antMatchers(HttpMethod.PUT, "/estacionamento/**").hasAnyAuthority("admin")
 
                 .antMatchers(HttpMethod.GET, "/estacionamento/**").hasAnyAuthority("admin", "admin_estacionamento")
-                .antMatchers(HttpMethod.PUT, "/estacionamento/**").hasAnyAuthority("admin", "admin_estacionamento")
 
                 .antMatchers(HttpMethod.GET, "/relatorio").hasAnyAuthority("admin_estacionamento")
                 .antMatchers(HttpMethod.GET, "/relatorio/**").hasAnyAuthority("admin_estacionamento")

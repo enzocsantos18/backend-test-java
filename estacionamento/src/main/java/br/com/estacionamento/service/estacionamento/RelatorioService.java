@@ -8,6 +8,7 @@ import br.com.estacionamento.repository.estacionamento.MovimentacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -20,12 +21,10 @@ public class RelatorioService {
 
     public EntradasSaidasRelatorio gerarEntradasSaidasPorPeriodo(RelatorioFormDTO dadosRelatorio, Long estacionamentoId) {
         try {
-            Date dataInicial = new SimpleDateFormat("yyyy-MM-dd").parse(dadosRelatorio.getDt_inicial());
-            Date dataFinal = new SimpleDateFormat("yyyy-MM-dd").parse(dadosRelatorio.getDt_final());
+            Date dataInicial = parseDate(dadosRelatorio.getDt_inicial());
+            Date dataFinal = parseDate(dadosRelatorio.getDt_final());
 
-            if (dataFinal.before(dataInicial)) {
-                throw new DomainException("Data inicial maior que data final");
-            }
+            checarData(dataInicial, dataFinal);
 
             EntradasSaidasRelatorio relatorio = movimentacaoRepository
                     .gerarRelatorioPorData(
@@ -40,13 +39,10 @@ public class RelatorioService {
 
     public List<EntradasSaidasHorarioRelatorio> gerarEntradasSaidasPorHorario(RelatorioFormDTO dadosRelatorio, Long estacionamentoId) {
         try {
-            Date dataInicial = new SimpleDateFormat("yyyy-MM-dd").parse(dadosRelatorio.getDt_inicial());
-            Date dataFinal = new SimpleDateFormat("yyyy-MM-dd").parse(dadosRelatorio.getDt_final());
+            Date dataInicial = parseDate(dadosRelatorio.getDt_inicial());
+            Date dataFinal = parseDate(dadosRelatorio.getDt_final());
 
-
-            if (dataFinal.before(dataInicial)) {
-                throw new DomainException("Data inicial maior que data final");
-            }
+            checarData(dataInicial, dataFinal);
 
             List<EntradasSaidasHorarioRelatorio> relatorios = movimentacaoRepository
                     .gerarRelatorioHoraPorData(
@@ -57,5 +53,15 @@ public class RelatorioService {
         } catch (Exception e) {
             throw new DomainException("Confira novamente os dados fornecidos");
         }
+    }
+
+    private void checarData(Date dataInicial, Date dataFinal) {
+        if (dataFinal.before(dataInicial)) {
+            throw new DomainException("Data inicial maior que data final");
+        }
+    }
+
+    private Date parseDate(String date) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd").parse(date);
     }
 }

@@ -9,6 +9,7 @@ import br.com.estacionamento.config.exception.DomainNotFoundException;
 import br.com.estacionamento.repository.estacionamento.EstacionamentoRepository;
 import br.com.estacionamento.repository.veiculo.TipoVeiculoRepository;
 import br.com.estacionamento.repository.estacionamento.VagaRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,6 @@ import java.util.Optional;
 
 @Service
 public class VagaService {
-
     @Autowired
     private VagaRepository vagaRepository;
     @Autowired
@@ -25,24 +25,57 @@ public class VagaService {
     @Autowired
     private TipoVeiculoRepository tipoVeiculoRepository;
 
+    public List<Vaga> buscar(Long estacionamentoId) {
+        List<Vaga> vagas = vagaRepository.findByEstacionamentoId(estacionamentoId);
+        return vagas;
+    }
 
     public Vaga adicionar(VagaFormDTO dadosVaga, Long estacionamentoId) {
 
-        Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(estacionamentoId);
+        Estacionamento estacionamento = getEstacionamento(estacionamentoId);
+        TipoVeiculo tipo = getTipoVeiculo(dadosVaga.getTipo_id());
 
-        if (!estacionamentoEncontrado.isPresent()){
-            throw new DomainException("Estacionamento não encontrado!");
+        verificarDisponibilidadeTipoVaga(dadosVaga, estacionamentoId);
+
+        Vaga vaga = dadosVaga.converterParaVaga(estacionamento, tipo);
+        Vaga vagaCriada = vagaRepository.save(vaga);
+
+        return vagaCriada;
+    }
+
+    public Vaga atualizar(VagaFormDTO dadosVaga, Long estacionamentoId) {
+        Estacionamento estacionamento = getEstacionamento(estacionamentoId);
+        TipoVeiculo tipo = getTipoVeiculo(dadosVaga.getTipo_id());
+
+
+        Vaga vaga = getVaga(dadosVaga.getTipo_id(), estacionamentoId);
+
+        vaga.setQuantidade(dadosVaga.getQuantidade());
+
+        Vaga vagaAtualizada = vagaRepository.save(vaga);
+
+        return vagaAtualizada;
+    }
+
+    public void deletar(Long estacionamentoId, Long tipoVagaId) {
+        Vaga vaga = getVaga(tipoVagaId, estacionamentoId);
+
+        vagaRepository.delete(vaga);
+    }
+
+    private Vaga getVaga(Long tipoId, Long estacionamentoId) {
+        Optional<Vaga> temVaga = vagaRepository.findByEstacionamentoIdAndTipoId(
+                estacionamentoId,
+                tipoId);
+
+        if (!temVaga.isPresent()){
+            throw new DomainNotFoundException("Vaga não encontrada");
         }
 
-        Optional<TipoVeiculo> tipoEncontrado = tipoVeiculoRepository.findById(dadosVaga.getTipo_id());
-        if (!tipoEncontrado.isPresent()){
-            throw new DomainException("Tipo de veiculo não encontrado!");
-        }
+        return temVaga.get();
+    }
 
-
-        Estacionamento estacionamento = estacionamentoEncontrado.get();
-        TipoVeiculo tipo = tipoEncontrado.get();
-
+    private void verificarDisponibilidadeTipoVaga(VagaFormDTO dadosVaga, Long estacionamentoId) {
         Optional<Vaga> temVaga = vagaRepository.findByEstacionamentoIdAndTipoId(
                 estacionamentoId,
                 dadosVaga.getTipo_id());
@@ -50,60 +83,24 @@ public class VagaService {
         if (temVaga.isPresent()){
             throw new DomainException("Não é possível criar mais uma vaga para esse tipo");
         }
+    }
 
-        Vaga vaga = dadosVaga.converterParaVaga(estacionamento, tipo);
-
-        Vaga vagaCriada = vagaRepository.save(vaga);
-
-        return vagaCriada;
-    };
-
-    public void deletar(Long estacionamentoId, Long tipoVagaId) {
-        Optional<Vaga> vagaEncontrada = vagaRepository.findByEstacionamentoIdAndTipoId(estacionamentoId, tipoVagaId);
-        if (!vagaEncontrada.isPresent()){
-            throw new DomainNotFoundException("Vaga não encontrada");
+    private TipoVeiculo getTipoVeiculo(Long tipoId) {
+        Optional<TipoVeiculo> tipoEncontrado = tipoVeiculoRepository.findById(tipoId);
+        if (!tipoEncontrado.isPresent()){
+            throw new DomainException("Tipo de veiculo não encontrado!");
         }
-
-        Vaga vaga = vagaEncontrada.get();
-
-        vagaRepository.delete(vaga);
+        TipoVeiculo tipo = tipoEncontrado.get();
+        return tipo;
     }
 
-    public List<Vaga> buscar(Long estacionamentoId) {
-
-        List<Vaga> vagas = vagaRepository.findByEstacionamentoId(estacionamentoId);
-
-        return vagas;
-    }
-
-    public Vaga atualizar(VagaFormDTO dadosVaga, Long estacionamentoId) {
-        Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(
-                estacionamentoId);
+    private Estacionamento getEstacionamento(Long estacionamentoId) {
+        Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(estacionamentoId);
 
         if (!estacionamentoEncontrado.isPresent()){
-            throw new DomainNotFoundException("Estacionamento não encontrado!");
+            throw new DomainException("Estacionamento não encontrado!");
         }
-
-        Optional<TipoVeiculo> tipoEncontrado = tipoVeiculoRepository.findById(dadosVaga.getTipo_id());
-        if (!tipoEncontrado.isPresent()){
-            throw new DomainNotFoundException("Tipo de veiculo não encontrado!");
-        }
-
-
-        Optional<Vaga> temVaga = vagaRepository.findByEstacionamentoIdAndTipoId(
-                estacionamentoId,
-                dadosVaga.getTipo_id());
-
-        if (!temVaga.isPresent()){
-            throw new DomainNotFoundException("Vaga não encontrada");
-        }
-
-        Vaga vaga = temVaga.get();
-
-        vaga.setQuantidade(dadosVaga.getQuantidade());
-
-        Vaga vagaAtualizada = vagaRepository.save(vaga);
-
-        return vagaAtualizada;
+        Estacionamento estacionamento = estacionamentoEncontrado.get();
+        return estacionamento;
     }
 }

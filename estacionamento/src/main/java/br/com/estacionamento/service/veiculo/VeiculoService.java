@@ -9,6 +9,7 @@ import br.com.estacionamento.config.exception.DomainNotFoundException;
 import br.com.estacionamento.repository.estacionamento.EstacionamentoRepository;
 import br.com.estacionamento.repository.veiculo.ModeloRepository;
 import br.com.estacionamento.repository.veiculo.VeiculoRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,18 +28,15 @@ public class VeiculoService {
     @Autowired
     private EstacionamentoRepository estacionamentoRepository;
 
+    public Veiculo buscarPelaPlaca(String placa, long estacionamentoId){
+        Veiculo veiculo = getVeiculo(placa, estacionamentoId);
+        return veiculo;
+    }
+
     @Transactional
     public Veiculo criar(VeiculoFormDTO veiculoDTO, Long estacionamentoId) {
-        Optional<Modelo> modeloEncontrado = modeloRepository.findById(veiculoDTO.getId_modelo());
-        if (!modeloEncontrado.isPresent()){
-            throw new DomainNotFoundException("Modelo não existente");
-        }
-
-
-        Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(estacionamentoId);
-        if (!estacionamentoEncontrado.isPresent()){
-            throw new DomainNotFoundException("Estacionamento não existe");
-        }
+        Modelo modelo = getModelo(veiculoDTO.getId_modelo());
+        Estacionamento estacionamento = getEstacionamento(estacionamentoId);
 
         Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(veiculoDTO.getPlaca(), estacionamentoId);
         if (veiculoEncontrado.isPresent()){
@@ -46,15 +44,38 @@ public class VeiculoService {
         }
 
 
-        Modelo modelo = modeloEncontrado.get();
-        Estacionamento estacionamento = estacionamentoEncontrado.get();
         Veiculo veiculo = veiculoDTO.converterParaVeiculo(modelo, estacionamento);
         Veiculo veiculoSalvo = veiculoRepository.save(veiculo);
 
         return veiculoSalvo;
     }
 
-    public Veiculo buscarPelaPlaca(String placa, long estacionamentoId){
+    @Transactional
+    public void deletarPelaPlaca(String placa, long estacionamentoId){
+        Veiculo veiculo = getVeiculo(placa, estacionamentoId);
+
+        veiculoRepository.delete(veiculo);
+    }
+
+    private Estacionamento getEstacionamento(Long estacionamentoId) {
+        Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(estacionamentoId);
+        if (!estacionamentoEncontrado.isPresent()){
+            throw new DomainNotFoundException("Estacionamento não existe");
+        }
+        Estacionamento estacionamento = estacionamentoEncontrado.get();
+        return estacionamento;
+    }
+
+    private Modelo getModelo(Long modeloId) {
+        Optional<Modelo> modeloEncontrado = modeloRepository.findById(modeloId);
+        if (!modeloEncontrado.isPresent()){
+            throw new DomainNotFoundException("Modelo não existente");
+        }
+        Modelo modelo = modeloEncontrado.get();
+        return modelo;
+    }
+
+    private Veiculo getVeiculo(String placa, long estacionamentoId) {
         Optional<Veiculo> veiculo = veiculoRepository.findByPlacaAndEstacionamento(placa, estacionamentoId);
 
         if (!veiculo.isPresent()){
@@ -62,18 +83,6 @@ public class VeiculoService {
         }
 
         return veiculo.get();
-
-    }
-
-    @Transactional
-    public void deletarPelaPlaca(String placa, long estacionamentoId){
-        Optional<Veiculo> veiculo = veiculoRepository.findByPlacaAndEstacionamento(placa, estacionamentoId);
-
-        if (!veiculo.isPresent()){
-            throw new DomainNotFoundException("Veiculo não encontrado");
-        }
-
-        veiculoRepository.delete(veiculo.get());
     }
 
 }

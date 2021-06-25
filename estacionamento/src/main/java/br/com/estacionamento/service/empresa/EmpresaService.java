@@ -29,6 +29,11 @@ public class EmpresaService {
     private EnderecoRepository enderecoRepository;
 
 
+    public Empresa buscarPorId(Long id) {
+        Empresa empresa = encontrarPorId(id);
+        return empresa;
+    }
+
     @Transactional
     public Empresa criar(EmpresaFormDTO dadosEmpresa) {
         Empresa empresa = dadosEmpresa.converterParaEmpresa();
@@ -55,24 +60,19 @@ public class EmpresaService {
         }
     }
 
-    public Empresa buscarPorId(Long id) {
-        Optional<Empresa> empresa = empresaRepository.findById(id);
+    @Transactional
+    public void deletarPorId(Long id) {
+        Empresa empresa = encontrarPorId(id);
+        empresaRepository.deleteById(empresa.getId());
+    }
 
+    private Empresa encontrarPorId(Long id) {
+        Optional<Empresa> empresa = empresaRepository.findById(id);
         if (!empresa.isPresent()) {
             throw new DomainNotFoundException("Empresa não encontrada");
         }
 
         return empresa.get();
-    }
-
-    @Transactional
-    public void deletarPorId(Long id) {
-        Optional<Empresa> empresa = empresaRepository.findById(id);
-        if (!empresa.isPresent()) {
-            throw new DomainNotFoundException("Empresa não encontrada");
-        }
-
-        empresaRepository.deleteById(empresa.get().getId());
     }
 
 }

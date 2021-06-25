@@ -25,70 +25,63 @@ public class EstacionamentoService {
     @Autowired
     private EmpresaRepository empresaRepository;
 
+    public List<Estacionamento> listagem(Long empresaId) {
+        List<Estacionamento> estacionamentos = estacionamentoRepository.findByEmpresaId(empresaId);
+        return estacionamentos;
+    }
+
+    public Estacionamento buscar(Long empresaId, Long estacionamentoId) {
+        Estacionamento estacionamento = getEstacionamento(empresaId, estacionamentoId);
+
+        return estacionamento;
+    }
+
     @Transactional
-    public Estacionamento criar(EstacionamentoFormDTO dadosEstacionamento, Long empresaId){
+    public Estacionamento criar(EstacionamentoFormDTO dadosEstacionamento, Long empresaId) {
         Optional<Empresa> empresaEncotrada = empresaRepository.findById(empresaId);
-        if (!empresaEncotrada.isPresent()){
+        if (!empresaEncotrada.isPresent()) {
             throw new DomainNotFoundException("Empresa não encontrada");
         }
 
-
         Estacionamento estacionamento = dadosEstacionamento.converterParaEstacionamento(empresaEncotrada.get());
-        Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findByNomeAndEmpresaId(estacionamento.getNome(), empresaId);
-        if (estacionamentoEncontrado.isPresent()){
-            throw new DomainException("Já existe um estacionamento com esse nome cadastrado!");
-        }
-
+        verificaDisponibilidadeNome(empresaId, dadosEstacionamento.getNome());
 
         Estacionamento estacionamentoCriado = estacionamentoRepository.save(estacionamento);
 
         return estacionamentoCriado;
     }
 
-    public List<Estacionamento> listagem(Long empresaId){
-        List<Estacionamento> estacionamentos = estacionamentoRepository.findByEmpresaId(empresaId);
-
-        return estacionamentos;
-    }
-
-    public Estacionamento buscar(Long empresaId, Long estacionamentoID){
-        Optional<Estacionamento> estacionamento = estacionamentoRepository.findByEmpresaIdAndId(empresaId, estacionamentoID);
-
-        if (!estacionamento.isPresent()){
-            throw new DomainNotFoundException("Estacionamento não encontrado");
-        }
-
-        return estacionamento.get();
-    }
-    @Transactional
-    public void deletar(Long empresaId, Long estacionamentoId) {
-        Optional<Estacionamento> estacionamento = estacionamentoRepository.findByEmpresaIdAndId(empresaId, estacionamentoId);
-
-        if (!estacionamento.isPresent()){
-            throw new DomainNotFoundException("Estacionamento não encontrado");
-        }
-
-        estacionamentoRepository.delete(estacionamento.get());
-    }
-
     @Transactional
     public Estacionamento atualizar(Long empresaId, Long estacionamentoId, EstacionamentoFormUpdateDTO dadosEstacionamento) {
-        Optional<Estacionamento> estacionamento = estacionamentoRepository.findByEmpresaIdAndId(empresaId, estacionamentoId);
-
-        if (!estacionamento.isPresent()){
-            throw new DomainNotFoundException("Estacionamento não encontrado");
-        }
-
-        Optional<Estacionamento> temEstacionamento = estacionamentoRepository.findByNomeAndEmpresaId(dadosEstacionamento.getNome(), empresaId);
-        if (temEstacionamento.isPresent()){
-            throw new DomainException("Já existe um estacionamento com esse nome cadastrado!");
-        }
-
-        Estacionamento estacionamentoEncontrado = estacionamento.get();
-        estacionamentoEncontrado.setNome(dadosEstacionamento.getNome());
-
-        Estacionamento estacionamentoAtualizado = estacionamentoRepository.save(estacionamentoEncontrado);
+        Estacionamento estacionamento = getEstacionamento(empresaId, estacionamentoId);
+        verificaDisponibilidadeNome(empresaId, dadosEstacionamento.getNome());
+        estacionamento.setNome(dadosEstacionamento.getNome());
+        Estacionamento estacionamentoAtualizado = estacionamentoRepository.save(estacionamento);
 
         return estacionamentoAtualizado;
+    }
+
+    @Transactional
+    public void deletar(Long empresaId, Long estacionamentoId) {
+        Estacionamento estacionamento = getEstacionamento(empresaId, estacionamentoId);
+
+        estacionamentoRepository.delete(estacionamento);
+    }
+
+
+    private void verificaDisponibilidadeNome(Long empresaId, String nome) {
+        Optional<Estacionamento> estacionamento = estacionamentoRepository.findByNomeAndEmpresaId(nome, empresaId);
+        if (estacionamento.isPresent()) {
+            throw new DomainException("Já existe um estacionamento com esse nome cadastrado!");
+        }
+    }
+
+    private Estacionamento getEstacionamento(Long empresaId, Long estacionamentoId) {
+        Optional<Estacionamento> estacionamento = estacionamentoRepository.findByEmpresaIdAndId(empresaId, estacionamentoId);
+
+        if (!estacionamento.isPresent()) {
+            throw new DomainNotFoundException("Estacionamento não encontrado");
+        }
+        return estacionamento.get();
     }
 }

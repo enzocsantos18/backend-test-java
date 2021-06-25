@@ -17,5 +17,4 @@ public class UserInformationService {
         return usuario.getEmpresa().getId();
     }
 
-
 }
