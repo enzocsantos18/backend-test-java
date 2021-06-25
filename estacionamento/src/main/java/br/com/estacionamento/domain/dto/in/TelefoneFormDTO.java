@@ -1,5 +1,8 @@
 package br.com.estacionamento.domain.dto.in;
 
+import br.com.estacionamento.domain.empresa.Empresa;
+import br.com.estacionamento.domain.empresa.Telefone;
+
 import javax.validation.constraints.Pattern;
 
 public class TelefoneFormDTO {
@@ -12,5 +15,13 @@ public class TelefoneFormDTO {
 
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    public Telefone converterParaTelefone(Empresa empresa){
+        Telefone telefone = new Telefone();
+        telefone.setEmpresa(empresa);
+        telefone.setNumero(this.numero);
+
+        return telefone;
     }
 }

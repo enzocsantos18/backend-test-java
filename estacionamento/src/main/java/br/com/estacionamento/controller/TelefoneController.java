@@ -4,6 +4,7 @@ import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
 import br.com.estacionamento.domain.dto.in.EmpresaFormUpdateDTO;
 import br.com.estacionamento.domain.dto.in.TelefoneFormDTO;
 import br.com.estacionamento.domain.empresa.Empresa;
+import br.com.estacionamento.domain.empresa.Telefone;
 import br.com.estacionamento.service.empresa.EmpresaService;
 import br.com.estacionamento.service.empresa.TelefoneService;
 import br.com.estacionamento.service.security.UserInformationService;
@@ -26,6 +27,12 @@ public class TelefoneController {
     @Autowired
     private TelefoneService telefoneService;
 
+    @PostMapping
+    public ResponseEntity<Telefone> adicionar(@RequestBody @Valid TelefoneFormDTO dadosTelefone, Authentication authentication) {
+        Long empresaId = userInformationService.getEmpresaId(authentication);
+        Telefone telefone = telefoneService.criar(dadosTelefone, empresaId);
+        return ResponseEntity.status(201).body(telefone);
+    }
 
     @DeleteMapping
     public ResponseEntity deletar(@RequestBody @Valid TelefoneFormDTO dadosTelefone, Authentication authentication) {
