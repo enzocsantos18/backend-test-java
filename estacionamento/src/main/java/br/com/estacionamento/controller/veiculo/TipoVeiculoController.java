@@ -1,4 +1,4 @@
-package br.com.estacionamento.controller;
+package br.com.estacionamento.controller.veiculo;
 
 import br.com.estacionamento.domain.dto.in.RelatorioFormDTO;
 import br.com.estacionamento.domain.dto.in.TelefoneFormDTO;

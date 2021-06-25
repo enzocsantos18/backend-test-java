@@ -1,4 +1,4 @@
-package br.com.estacionamento.controller;
+package br.com.estacionamento.controller.veiculo;
 
 import br.com.estacionamento.domain.veiculo.Fabricante;
 import br.com.estacionamento.service.veiculo.FabricanteService;
@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/fabricante")
 public class FabricanteController {
-
     @Autowired
     private FabricanteService fabricanteService;
 

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
-
     @Query("SELECT v FROM Veiculo v where v.placa = ?1 and v.estacionamento.id = ?2")
     Optional<Veiculo> findByPlacaAndEstacionamento(String placa, Long estacionamento);
 }

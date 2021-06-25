@@ -12,19 +12,20 @@ import java.util.List;
 
 @Entity
 public class Empresa {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String cnpj;
-    @OneToMany (mappedBy = "empresa", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Telefone> telefone = new ArrayList<>();
     @JsonIgnore
-    @OneToMany (mappedBy = "empresa", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Usuario> usuario = new ArrayList<>();
     @JsonIgnore
-    @OneToMany (mappedBy = "empresa", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Estacionamento> estacionamentos = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -74,7 +75,7 @@ public class Empresa {
         this.endereco = endereco;
     }
 
-    public void adicionarTelefone(Telefone telefone){
+    public void adicionarTelefone(Telefone telefone) {
         this.telefone.add(telefone);
     }
 }

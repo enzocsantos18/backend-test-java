@@ -17,7 +17,7 @@ public class TokenService {
     @Value("${forum.jwt.secret}")
     private String secret;
 
-    public String gerarToken(Authentication authentication){
+    public String gerarToken(Authentication authentication) {
 
         Usuario logado = (Usuario) authentication.getPrincipal();
 
@@ -34,11 +34,10 @@ public class TokenService {
     }
 
     public boolean isTokenValido(String token) {
-        try{
+        try {
             Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token);
             return true;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

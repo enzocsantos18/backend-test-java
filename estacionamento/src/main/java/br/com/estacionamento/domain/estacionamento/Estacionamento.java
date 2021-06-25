@@ -31,7 +31,6 @@ public class Estacionamento {
     }
 
 
-
     public String getNome() {
         return nome;
     }

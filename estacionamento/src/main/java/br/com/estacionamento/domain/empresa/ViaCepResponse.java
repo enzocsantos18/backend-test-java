@@ -1,16 +1,16 @@
 package br.com.estacionamento.domain.empresa;
 
 public class ViaCepResponse {
-     private String cep;
-     private String logradouro;
-     private String complemento;
-     private String bairro;
-     private String localidade;
-     private String uf;
-     private String ibge;
-     private String gia;
-     private String ddd;
-     private String siafi;
+    private String cep;
+    private String logradouro;
+    private String complemento;
+    private String bairro;
+    private String localidade;
+    private String uf;
+    private String ibge;
+    private String gia;
+    private String ddd;
+    private String siafi;
 
     public String getCep() {
         return cep;
@@ -92,7 +92,7 @@ public class ViaCepResponse {
         this.siafi = siafi;
     }
 
-    public Endereco converterParaEndereco(){
+    public Endereco converterParaEndereco() {
         Endereco endereco = new Endereco();
         endereco.setCep(this.cep);
         endereco.setLogradouro(this.logradouro);

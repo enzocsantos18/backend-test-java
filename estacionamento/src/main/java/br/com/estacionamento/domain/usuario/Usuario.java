@@ -1,8 +1,8 @@
 package br.com.estacionamento.domain.usuario;
 
 
-import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.empresa.Empresa;
+import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

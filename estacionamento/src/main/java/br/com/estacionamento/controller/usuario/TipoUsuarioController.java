@@ -1,4 +1,4 @@
-package br.com.estacionamento.controller;
+package br.com.estacionamento.controller.usuario;
 
 import br.com.estacionamento.domain.usuario.TipoUsuario;
 import br.com.estacionamento.service.usuario.TipoUsuarioService;
@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/tipo/usuario")
 public class TipoUsuarioController {
-
     @Autowired
     private TipoUsuarioService tipoUsuarioService;
 

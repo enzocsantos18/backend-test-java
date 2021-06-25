@@ -17,12 +17,9 @@ public class ModeloService {
         if (fabricanteId == null) {
 
             modelos = modeloRepository.findAll();
-        }
-        else{
+        } else {
             modelos = modeloRepository.findAllByFabricanteId(fabricanteId);
         }
         return modelos;
     }
-
-
 }

@@ -1,7 +1,7 @@
 package br.com.estacionamento.service.estacionamento;
 
-import br.com.estacionamento.domain.dto.in.RelatorioFormDTO;
 import br.com.estacionamento.config.exception.DomainException;
+import br.com.estacionamento.domain.dto.in.RelatorioFormDTO;
 import br.com.estacionamento.domain.estacionamento.EntradasSaidasHorarioRelatorio;
 import br.com.estacionamento.domain.estacionamento.EntradasSaidasRelatorio;
 import br.com.estacionamento.repository.estacionamento.MovimentacaoRepository;
@@ -26,12 +26,11 @@ public class RelatorioService {
 
             checarData(dataInicial, dataFinal);
 
-            EntradasSaidasRelatorio relatorio = movimentacaoRepository
+            return movimentacaoRepository
                     .gerarRelatorioPorData(
                             dataInicial,
                             dataFinal,
                             estacionamentoId);
-            return relatorio;
         } catch (Exception e) {
             throw new DomainException("Confira novamente os dados fornecidos");
         }
@@ -44,12 +43,11 @@ public class RelatorioService {
 
             checarData(dataInicial, dataFinal);
 
-            List<EntradasSaidasHorarioRelatorio> relatorios = movimentacaoRepository
+            return movimentacaoRepository
                     .gerarRelatorioHoraPorData(
                             dataInicial,
                             dataFinal,
                             estacionamentoId);
-            return relatorios;
         } catch (Exception e) {
             throw new DomainException("Confira novamente os dados fornecidos");
         }

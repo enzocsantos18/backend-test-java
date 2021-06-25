@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Movimentacao {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     private Veiculo veiculo;

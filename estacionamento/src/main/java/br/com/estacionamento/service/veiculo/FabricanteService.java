@@ -13,9 +13,6 @@ public class FabricanteService {
     private FabricanteRepository fabricanteRepository;
 
     public List<Fabricante> listar() {
-        List<Fabricante> fabricantes = fabricanteRepository.findAll();
-        return fabricantes;
+        return fabricanteRepository.findAll();
     }
-
-
 }

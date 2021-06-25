@@ -4,10 +4,10 @@ import javax.persistence.*;
 
 @Entity
 public class Telefone {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String numero;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Empresa empresa;
 
@@ -18,7 +18,6 @@ public class Telefone {
         this.numero = numero;
     }
 
-
     public Long getId() {
         return id;
     }
@@ -26,7 +25,6 @@ public class Telefone {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;

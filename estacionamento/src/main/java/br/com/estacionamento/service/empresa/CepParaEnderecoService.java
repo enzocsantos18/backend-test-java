@@ -16,7 +16,7 @@ import java.net.http.HttpResponse;
 public class CepParaEnderecoService {
     public Endereco buscarDadosEndereco(String cep, Integer numero) throws URISyntaxException, IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
-        HttpRequest httpRequest = HttpRequest.newBuilder(new URI("https://viacep.com.br/ws/"+ cep +"/json/")).GET().build();
+        HttpRequest httpRequest = HttpRequest.newBuilder(new URI("https://viacep.com.br/ws/" + cep + "/json/")).GET().build();
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         ObjectMapper objectMapper = new ObjectMapper();
 

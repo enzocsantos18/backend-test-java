@@ -1,4 +1,4 @@
-package br.com.estacionamento.controller;
+package br.com.estacionamento.controller.veiculo;
 
 import br.com.estacionamento.domain.veiculo.Modelo;
 import br.com.estacionamento.service.veiculo.ModeloService;
@@ -14,13 +14,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/modelo")
 public class ModeloController {
-    
     @Autowired
     private ModeloService modeloService;
 
     @GetMapping
     public ResponseEntity<List<Modelo>> listar(@RequestParam(value = "fabricanteId", required = false) Long fabricanteId) {
-
         List<Modelo> modelos = modeloService.listar(fabricanteId);
         return ResponseEntity.ok(modelos);
     }

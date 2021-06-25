@@ -6,7 +6,8 @@ import javax.persistence.*;
 
 @Entity
 public class Vaga {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     private Estacionamento estacionamento;

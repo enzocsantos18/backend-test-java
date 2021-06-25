@@ -1,4 +1,4 @@
-package br.com.estacionamento.controller;
+package br.com.estacionamento.controller.empresa;
 
 import br.com.estacionamento.domain.dto.in.EmpresaFormUpdateDTO;
 import br.com.estacionamento.domain.empresa.Empresa;
@@ -18,7 +18,6 @@ import java.net.URI;
 @RestController
 @RequestMapping("/empresa")
 public class EmpresaController {
-
     @Autowired
     private EmpresaService empresaService;
 
@@ -29,7 +28,7 @@ public class EmpresaController {
     @GetMapping
     public ResponseEntity<Empresa> buscar(Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
-        Empresa empresa = empresaService.buscarPorId(empresaId);
+        Empresa empresa = empresaService.buscar(empresaId);
         return ResponseEntity.ok(empresa);
     }
 
@@ -43,16 +42,14 @@ public class EmpresaController {
     @PutMapping
     public ResponseEntity<Empresa> atualizar(@Valid @RequestBody EmpresaFormUpdateDTO dadosEmpresa, Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
-
-        Empresa empresa = empresaService.atualizar(dadosEmpresa,empresaId);
+        Empresa empresa = empresaService.atualizar(dadosEmpresa, empresaId);
         return ResponseEntity.ok(empresa);
     }
 
     @DeleteMapping
     public ResponseEntity deletar(Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
-        empresaService.deletarPorId(empresaId);
+        empresaService.deletar(empresaId);
         return ResponseEntity.ok().build();
     }
-
 }

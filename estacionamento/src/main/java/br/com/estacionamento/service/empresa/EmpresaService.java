@@ -1,22 +1,19 @@
 package br.com.estacionamento.service.empresa;
 
+import br.com.estacionamento.config.exception.DomainException;
+import br.com.estacionamento.config.exception.DomainNotFoundException;
+import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
 import br.com.estacionamento.domain.dto.in.EmpresaFormUpdateDTO;
 import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.empresa.Endereco;
 import br.com.estacionamento.domain.empresa.Telefone;
-import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
-import br.com.estacionamento.config.exception.DomainException;
-import br.com.estacionamento.config.exception.DomainNotFoundException;
 import br.com.estacionamento.repository.empresa.EmpresaRepository;
 import br.com.estacionamento.repository.empresa.EnderecoRepository;
 import br.com.estacionamento.repository.empresa.TelefoneRepository;
-import br.com.estacionamento.service.empresa.CepParaEnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 @Service
@@ -32,9 +29,8 @@ public class EmpresaService {
     private EnderecoRepository enderecoRepository;
 
 
-    public Empresa buscarPorId(Long id) {
-        Empresa empresa = encontrarPorId(id);
-        return empresa;
+    public Empresa buscar(Long id) {
+        return encontrarPorId(id);
     }
 
     @Transactional
@@ -68,7 +64,7 @@ public class EmpresaService {
             Empresa empresa = encontrarPorId(empresaId);
             Endereco endereco = empresa.getEndereco();
 
-            if (!dadosEmpresa.getCnpj().equals(empresa.getCnpj())){
+            if (!dadosEmpresa.getCnpj().equals(empresa.getCnpj())) {
                 validarCnpj(dadosEmpresa.getCnpj());
             }
 
@@ -78,16 +74,14 @@ public class EmpresaService {
             Empresa novosDadosEmpresa = dadosEmpresa.converterParaEmpresa(empresa);
             novosDadosEmpresa.setEndereco(novoEndereco);
 
-            Empresa empresaAtualizada = empresaRepository.save(novosDadosEmpresa);
-
-            return empresaAtualizada;
+            return empresaRepository.save(novosDadosEmpresa);
         } catch (Exception e) {
             throw new DomainException("Cadastro empresa não foi realizado, confira os dados novamente.");
         }
     }
 
     @Transactional
-    public void deletarPorId(Long id) {
+    public void deletar(Long id) {
         Empresa empresa = encontrarPorId(id);
         empresaRepository.deleteById(empresa.getId());
     }
@@ -106,6 +100,5 @@ public class EmpresaService {
             throw new DomainException("Cnpj já cadastrado.");
         }
     }
-
 
 }

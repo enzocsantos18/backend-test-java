@@ -1,4 +1,4 @@
-package br.com.estacionamento.controller;
+package br.com.estacionamento.controller.veiculo;
 
 import br.com.estacionamento.domain.veiculo.Veiculo;
 import br.com.estacionamento.domain.dto.in.VeiculoFormDTO;
@@ -25,12 +25,9 @@ public class VeiculoController {
     private UserInformationService userInformationService;
 
     @GetMapping("/{placa}")
-    public ResponseEntity<Veiculo> buscar(
-            @PathVariable("placa") String placa,
-            Authentication authentication
-    ) {
+    public ResponseEntity<Veiculo> buscar(@PathVariable("placa") String placa, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-        Veiculo veiculo = veiculoService.buscarPelaPlaca(placa, estacionamentoId);
+        Veiculo veiculo = veiculoService.buscar(placa, estacionamentoId);
         return ResponseEntity.ok(veiculo);
     }
 
@@ -45,16 +42,12 @@ public class VeiculoController {
         Veiculo veiculo = veiculoService.criar(dadosVeiculo, estacionamentoId);
         URI uri = uriBuilder.path("/veiculo/{placa}").buildAndExpand(veiculo.getPlaca()).toUri();
         return ResponseEntity.created(uri).body(veiculo);
-
     }
 
     @DeleteMapping("/{placa}")
-    public ResponseEntity deletar(
-            @PathVariable("placa") String placa,
-            Authentication authentication
-    ) {
+    public ResponseEntity deletar(@PathVariable("placa") String placa, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-        veiculoService.deletarPelaPlaca(placa, estacionamentoId);
+        veiculoService.deletar(placa, estacionamentoId);
         return ResponseEntity.ok().build();
     }
 

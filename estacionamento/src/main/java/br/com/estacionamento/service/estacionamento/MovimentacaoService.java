@@ -1,15 +1,14 @@
 package br.com.estacionamento.service.estacionamento;
 
+import br.com.estacionamento.config.exception.DomainException;
+import br.com.estacionamento.config.exception.DomainNotFoundException;
 import br.com.estacionamento.domain.dto.in.MovimentacaoFormDTO;
 import br.com.estacionamento.domain.estacionamento.Movimentacao;
 import br.com.estacionamento.domain.estacionamento.Vaga;
-import br.com.estacionamento.config.exception.DomainException;
-import br.com.estacionamento.config.exception.DomainNotFoundException;
 import br.com.estacionamento.domain.veiculo.Veiculo;
 import br.com.estacionamento.repository.estacionamento.MovimentacaoRepository;
 import br.com.estacionamento.repository.estacionamento.VagaRepository;
 import br.com.estacionamento.repository.veiculo.VeiculoRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,18 +30,14 @@ public class MovimentacaoService {
         verificaDisponibilidadeDeVaga(veiculo);
         Movimentacao movimentacao = verificaEntrada(veiculo);
 
-        Movimentacao movimentacaoCriada = movimentacaoRepository.save(movimentacao);
-
-        return movimentacaoCriada;
+        return movimentacaoRepository.save(movimentacao);
     }
 
-    public Movimentacao saida(MovimentacaoFormDTO dadosMovimentacao,  Long estacionamentoId) {
+    public Movimentacao saida(MovimentacaoFormDTO dadosMovimentacao, Long estacionamentoId) {
         Veiculo veiculo = getVeiculo(dadosMovimentacao.getPlaca(), estacionamentoId);
         Movimentacao movimentacao = verificaSaida(veiculo);
 
-        Movimentacao movimentacaoSaida = movimentacaoRepository.save(movimentacao);
-
-        return movimentacaoSaida;
+        return movimentacaoRepository.save(movimentacao);
     }
 
     private Movimentacao verificaEntrada(Veiculo veiculo) {
@@ -51,7 +46,7 @@ public class MovimentacaoService {
                 veiculo.getEstacionamento().getId()
         );
 
-        if (verificarMovimentacao.isPresent() && verificarMovimentacao.get().getSaida() == null){
+        if (verificarMovimentacao.isPresent() && verificarMovimentacao.get().getSaida() == null) {
             throw new DomainException("O veículo ainda não deu saída");
         }
 
@@ -69,7 +64,7 @@ public class MovimentacaoService {
         );
 
 
-        if (verificarMovimentacao.isPresent() && verificarMovimentacao.get().getSaida() != null){
+        if (verificarMovimentacao.isPresent() && verificarMovimentacao.get().getSaida() != null) {
             throw new DomainException("O veículo já deu saída");
         }
         Movimentacao movimentacao = verificarMovimentacao.get();
@@ -80,7 +75,7 @@ public class MovimentacaoService {
 
     private Veiculo getVeiculo(String placa, Long estacionamentoId) {
         Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(placa, estacionamentoId);
-        if (!veiculoEncontrado.isPresent()){
+        if (!veiculoEncontrado.isPresent()) {
             throw new DomainNotFoundException("Veiculo não encontrado");
         }
 
@@ -97,11 +92,11 @@ public class MovimentacaoService {
                 , veiculo.getModelo().getTipoVeiculo().getId());
 
 
-        if (!vaga.isPresent()){
+        if (!vaga.isPresent()) {
             throw new DomainNotFoundException("Vaga não existe");
         }
 
-        if (vaga.get().getQuantidade().longValue() == quantidadeDeMovimentacoes){
+        if (vaga.get().getQuantidade().longValue() == quantidadeDeMovimentacoes) {
             throw new DomainException("Vagas cheias");
         }
     }

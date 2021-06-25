@@ -35,20 +35,20 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = DomainException.class)
-    public ResponseEntity<Object> handleDomainExcpetions(DomainException e, WebRequest request){
+    public ResponseEntity<Object> handleDomainExcpetions(DomainException e, WebRequest request) {
         String mensagem = e.getLocalizedMessage();
         if (mensagem == null) mensagem = e.toString();
 
-        MensagemErroDTO erro = new MensagemErroDTO(LocalDateTime.now(),mensagem);
+        MensagemErroDTO erro = new MensagemErroDTO(LocalDateTime.now(), mensagem);
         return new ResponseEntity<>(erro, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = DomainNotFoundException.class)
-    public ResponseEntity<Object> handleDomainNotFoundExcpetions(DomainNotFoundException e, WebRequest request){
+    public ResponseEntity<Object> handleDomainNotFoundExcpetions(DomainNotFoundException e, WebRequest request) {
         String mensagem = e.getLocalizedMessage();
         if (mensagem == null) mensagem = e.toString();
 
-        MensagemErroDTO erro = new MensagemErroDTO(LocalDateTime.now(),mensagem);
+        MensagemErroDTO erro = new MensagemErroDTO(LocalDateTime.now(), mensagem);
         return new ResponseEntity<>(erro, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
@@ -57,7 +57,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         String mensagem = e.getLocalizedMessage();
         if (mensagem == null) mensagem = e.toString();
 
-        MensagemErroDTO erro = new MensagemErroDTO(LocalDateTime.now(),mensagem);
+        MensagemErroDTO erro = new MensagemErroDTO(LocalDateTime.now(), mensagem);
         return new ResponseEntity<>(erro, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

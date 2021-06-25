@@ -1,4 +1,4 @@
-package br.com.estacionamento.controller;
+package br.com.estacionamento.controller.security;
 
 import br.com.estacionamento.domain.dto.in.LoginFormDTO;
 import br.com.estacionamento.domain.dto.out.TokenDto;
@@ -18,13 +18,11 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private TokenService tokenService;
-
 
     @PostMapping
     public ResponseEntity<TokenDto> logar(@Valid @RequestBody LoginFormDTO dadosLogin) {

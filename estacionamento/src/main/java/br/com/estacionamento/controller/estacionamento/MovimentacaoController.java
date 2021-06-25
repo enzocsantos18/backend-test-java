@@ -1,21 +1,22 @@
-package br.com.estacionamento.controller;
+package br.com.estacionamento.controller.estacionamento;
 
-import br.com.estacionamento.domain.estacionamento.Movimentacao;
 import br.com.estacionamento.domain.dto.in.MovimentacaoFormDTO;
+import br.com.estacionamento.domain.estacionamento.Movimentacao;
 import br.com.estacionamento.service.estacionamento.MovimentacaoService;
 import br.com.estacionamento.service.security.UserInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
 
 @RestController
 @RequestMapping("/movimentacao")
 public class MovimentacaoController {
-
     @Autowired
     private MovimentacaoService movimentacaoService;
 
@@ -25,7 +26,6 @@ public class MovimentacaoController {
     @PostMapping("/entrada")
     public ResponseEntity<Movimentacao> entrada(@RequestBody @Valid MovimentacaoFormDTO dadosMovimentacao, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-
         Movimentacao movimentacao = movimentacaoService.entrada(dadosMovimentacao, estacionamentoId);
         return ResponseEntity.ok(movimentacao);
     }

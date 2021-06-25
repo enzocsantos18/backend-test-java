@@ -1,4 +1,4 @@
-package br.com.estacionamento.controller;
+package br.com.estacionamento.controller.estacionamento;
 
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.dto.in.EstacionamentoFormDTO;
@@ -15,11 +15,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/estacionamento")
 public class EstacionamentoController {
-
     @Autowired
     private EstacionamentoService estacionamentoService;
 
@@ -27,15 +25,14 @@ public class EstacionamentoController {
     private UserInformationService userInformationService;
 
     @GetMapping
-    public ResponseEntity<List<Estacionamento>> listagemPorEmpresa(Authentication authentication) {
+    public ResponseEntity<List<Estacionamento>> listar(Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
-        List<Estacionamento> listagem = estacionamentoService.listagem(empresaId);
+        List<Estacionamento> listagem = estacionamentoService.listar(empresaId);
         return ResponseEntity.ok(listagem);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estacionamento> buscarPorId(@PathVariable("id") Long estacionamentoId,
-                                                      Authentication authentication) {
+    public ResponseEntity<Estacionamento> buscar(@PathVariable("id") Long estacionamentoId, Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
         Estacionamento estacionamento = estacionamentoService.buscar(empresaId, estacionamentoId);
         return ResponseEntity.ok(estacionamento);
@@ -50,6 +47,7 @@ public class EstacionamentoController {
         URI uri = uriBuilder.path("/estacionamento/{id}").buildAndExpand(estacionamento.getId()).toUri();
         return ResponseEntity.created(uri).body(estacionamento);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<Estacionamento> atualizar(@PathVariable("id") Long estacionamentoId,
                                                     @RequestBody @Valid EstacionamentoFormUpdateDTO dadosEstacionamento,
@@ -66,6 +64,4 @@ public class EstacionamentoController {
         estacionamentoService.deletar(empresaId, estacionamentoId);
         return ResponseEntity.ok().build();
     }
-
-
 }

@@ -1,8 +1,8 @@
 package br.com.estacionamento.repository.estacionamento;
 
-import br.com.estacionamento.domain.estacionamento.Movimentacao;
 import br.com.estacionamento.domain.estacionamento.EntradasSaidasHorarioRelatorio;
 import br.com.estacionamento.domain.estacionamento.EntradasSaidasRelatorio;
+import br.com.estacionamento.domain.estacionamento.Movimentacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

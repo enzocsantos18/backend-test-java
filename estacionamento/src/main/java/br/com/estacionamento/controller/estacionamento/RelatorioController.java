@@ -1,5 +1,4 @@
-package br.com.estacionamento.controller;
-
+package br.com.estacionamento.controller.estacionamento;
 
 import br.com.estacionamento.domain.dto.in.RelatorioFormDTO;
 import br.com.estacionamento.domain.estacionamento.EntradasSaidasHorarioRelatorio;
@@ -14,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/relatorio")
 public class RelatorioController {
-
     @Autowired
     private RelatorioService relatorioService;
 
@@ -28,7 +25,6 @@ public class RelatorioController {
     @GetMapping
     public ResponseEntity<EntradasSaidasRelatorio> gerarRelatorioData(@RequestBody @Valid RelatorioFormDTO dadosRelatorio, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-
         EntradasSaidasRelatorio relatorio = relatorioService.gerarEntradasSaidasPorPeriodo(dadosRelatorio, estacionamentoId);
         return ResponseEntity.ok(relatorio);
     }

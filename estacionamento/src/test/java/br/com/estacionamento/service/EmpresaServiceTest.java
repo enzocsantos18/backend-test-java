@@ -36,7 +36,7 @@ class EmpresaServiceTest {
 
     @Test
     void deveriaRetornarEmpresaBuscaPorId(){
-        Long id = 1l;
+        Long id = 1L;
         EmpresaFormDTO empresaFormDTO = new EmpresaFormDTO();
         empresaFormDTO.setCep("11365-210");
         empresaFormDTO.setCnpj("51.193.861/0001-74");
@@ -47,7 +47,7 @@ class EmpresaServiceTest {
         Empresa empresaCriada = empresaService.criar(empresaFormDTO);
 
 
-        Empresa empresa = empresaService.buscarPorId(id);
+        Empresa empresa = empresaService.buscar(id);
 
         assertEquals(empresa.getNome(), empresaCriada.getNome());
         assertEquals(empresa.getCnpj(), empresaCriada.getCnpj());
@@ -55,7 +55,7 @@ class EmpresaServiceTest {
 
     @Test
     void deveriaDeletarEmpresa(){
-        Long id = 1l;
+        Long id = 1L;
         EmpresaFormDTO empresaFormDTO = new EmpresaFormDTO();
         empresaFormDTO.setCep("11365-210");
         empresaFormDTO.setCnpj("51.193.861/0001-74");
@@ -65,8 +65,8 @@ class EmpresaServiceTest {
 
         Empresa empresaCriada = empresaService.criar(empresaFormDTO);
 
-        empresaService.deletarPorId(empresaCriada.getId());
+        empresaService.deletar(empresaCriada.getId());
 
-        assertThrows(RuntimeException.class, () -> empresaService.buscarPorId(1l));
+        assertThrows(RuntimeException.class, () -> empresaService.buscar(1L));
     }
 }

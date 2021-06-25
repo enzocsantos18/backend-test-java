@@ -25,7 +25,7 @@ public class TelefoneService {
     public void deletar(TelefoneFormDTO dadosTelefone, Long empresaId) {
         Optional<Telefone> telefone = telefoneRepository.findByNumeroAndEmpresaId(dadosTelefone.getNumero(), empresaId);
 
-        if (!telefone.isPresent()){
+        if (!telefone.isPresent()) {
             throw new DomainNotFoundException("Número não encontrado");
         }
 
@@ -37,7 +37,7 @@ public class TelefoneService {
     public Telefone criar(TelefoneFormDTO dadosTelefone, Long empresaId) {
         Optional<Telefone> verificarTelefone = telefoneRepository.findByNumeroAndEmpresaId(dadosTelefone.getNumero(), empresaId);
 
-        if (verificarTelefone.isPresent()){
+        if (verificarTelefone.isPresent()) {
             throw new DomainNotFoundException("Número já cadastrado");
         }
 
