@@ -2,6 +2,10 @@ package br.com.estacionamento.domain.dto.in;
 
 import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.empresa.Telefone;
+import br.com.estacionamento.domain.usuario.TipoUsuario;
+import br.com.estacionamento.domain.usuario.Usuario;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.*;
 
@@ -17,6 +21,14 @@ public class EmpresaFormDTO {
     @NotNull
     @Min(1)
     private Integer numero;
+    @Pattern(regexp = "^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$", message = "email enviado com formato incorreto!")
+    @NotBlank
+    private String email;
+    @NotBlank
+    @Length(min = 6, max = 12)
+    private String senha;
+    @NotBlank
+    private String nome_usuario;
 
     public String getNome() {
         return nome;
@@ -58,6 +70,29 @@ public class EmpresaFormDTO {
         this.numero = numero;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getNome_usuario() {
+        return nome_usuario;
+    }
+
+    public void setNome_usuario(String nome_usuario) {
+        this.nome_usuario = nome_usuario;
+    }
 
     public Empresa converterParaEmpresa(){
         Empresa empresa = new Empresa();
@@ -65,5 +100,16 @@ public class EmpresaFormDTO {
         empresa.setCnpj(this.cnpj);
 
         return empresa;
+    }
+
+    public Usuario converterParaUsuario(Empresa empresa, TipoUsuario tipo){
+        Usuario usuario = new Usuario();
+        usuario.setEmail(this.email);
+        usuario.setNome(this.nome_usuario);
+        usuario.setSenha( new BCryptPasswordEncoder().encode(this.senha));
+        usuario.setEmpresa(empresa);
+        usuario.setTipos(tipo);
+
+        return usuario;
     }
 }

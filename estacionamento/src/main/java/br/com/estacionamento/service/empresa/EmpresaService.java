@@ -7,9 +7,13 @@ import br.com.estacionamento.domain.dto.in.EmpresaFormUpdateDTO;
 import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.empresa.Endereco;
 import br.com.estacionamento.domain.empresa.Telefone;
+import br.com.estacionamento.domain.usuario.TipoUsuario;
+import br.com.estacionamento.domain.usuario.Usuario;
 import br.com.estacionamento.repository.empresa.EmpresaRepository;
 import br.com.estacionamento.repository.empresa.EnderecoRepository;
 import br.com.estacionamento.repository.empresa.TelefoneRepository;
+import br.com.estacionamento.repository.usuario.TipoUsuarioRepository;
+import br.com.estacionamento.repository.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,10 @@ public class EmpresaService {
     private TelefoneRepository telefoneRepository;
     @Autowired
     private EnderecoRepository enderecoRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private TipoUsuarioRepository tipoUsuarioRepository;
 
 
     public Empresa buscar(Long id) {
@@ -51,6 +59,12 @@ public class EmpresaService {
             Telefone telefoneSalvo = telefoneRepository.save(telefone);
 
             empresaSalva.adicionarTelefone(telefoneSalvo);
+
+            TipoUsuario admin = tipoUsuarioRepository.findOneByNome("admin");
+            Usuario usuario = dadosEmpresa.converterParaUsuario(empresaSalva, admin);
+
+            Usuario usuarioCriado = usuarioRepository.save(usuario);
+
             return empresaSalva;
         } catch (Exception e) {
             throw new DomainException("Cadastro empresa não foi realizado, confira os dados novamente.");

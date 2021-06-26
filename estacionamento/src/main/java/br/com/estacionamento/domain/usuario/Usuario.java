@@ -30,6 +30,22 @@ public class Usuario implements UserDetails {
         return tipos;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setTipos(TipoUsuario tipo) {
+        this.tipos.add(tipo);
+    }
+
     @Override
     public String getPassword() {
         return senha;
