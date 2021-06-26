@@ -6,8 +6,12 @@ import br.com.estacionamento.domain.dto.in.EstacionamentoFormDTO;
 import br.com.estacionamento.domain.dto.in.EstacionamentoFormUpdateDTO;
 import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
+import br.com.estacionamento.domain.usuario.TipoUsuario;
+import br.com.estacionamento.domain.usuario.Usuario;
 import br.com.estacionamento.repository.empresa.EmpresaRepository;
 import br.com.estacionamento.repository.estacionamento.EstacionamentoRepository;
+import br.com.estacionamento.repository.usuario.TipoUsuarioRepository;
+import br.com.estacionamento.repository.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +28,12 @@ public class EstacionamentoService {
 
     @Autowired
     private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private TipoUsuarioRepository tipoUsuarioRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public List<Estacionamento> listar(Long empresaId) {
         return estacionamentoRepository.findByEmpresaId(empresaId);
@@ -42,6 +52,17 @@ public class EstacionamentoService {
 
         Estacionamento estacionamento = dadosEstacionamento.converterParaEstacionamento(empresaEncotrada.get());
         verificaDisponibilidadeNome(empresaId, dadosEstacionamento.getNome());
+        Estacionamento estacionamentoCriado = estacionamentoRepository.save(estacionamento);
+        TipoUsuario tipo = tipoUsuarioRepository.findOneByNome("admin_estacionamento");
+        Usuario usuario = dadosEstacionamento.converterParaUsuario(empresaEncotrada.get(), estacionamentoCriado, tipo);
+
+        Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(dadosEstacionamento.getEmail());
+        if (usuarioEncontrado.isPresent()){
+            throw new DomainException("Usuário já cadastrado!");
+        }
+
+
+        Usuario usuarioCriado = usuarioRepository.save(usuario);
 
         return estacionamentoRepository.save(estacionamento);
     }

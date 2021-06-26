@@ -63,6 +63,11 @@ public class EmpresaService {
             TipoUsuario admin = tipoUsuarioRepository.findOneByNome("admin");
             Usuario usuario = dadosEmpresa.converterParaUsuario(empresaSalva, admin);
 
+            Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(dadosEmpresa.getEmail());
+            if (usuarioEncontrado.isPresent()){
+                throw new DomainException("Usuário já cadastrado!");
+            }
+
             Usuario usuarioCriado = usuarioRepository.save(usuario);
 
             return empresaSalva;

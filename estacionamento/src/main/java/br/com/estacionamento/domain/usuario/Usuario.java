@@ -30,6 +30,10 @@ public class Usuario implements UserDetails {
         return tipos;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
