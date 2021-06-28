@@ -10,10 +10,13 @@ import br.com.estacionamento.domain.usuario.Usuario;
 import br.com.estacionamento.repository.estacionamento.EstacionamentoRepository;
 import br.com.estacionamento.repository.usuario.TipoUsuarioRepository;
 import br.com.estacionamento.repository.usuario.UsuarioRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +29,30 @@ public class UsuarioService {
     @Autowired
     private TipoUsuarioRepository tipoUsuarioRepository;
 
+
+    public List<Usuario> listar(Usuario usuarioLogado, Long estacionamentoId){
+        List<Usuario> lista = new ArrayList<>();
+        Optional<Estacionamento> estacionamento = estacionamentoRepository.findById(estacionamentoId);
+        if (estacionamento.isEmpty()){
+            throw new DomainNotFoundException("Estacionamento não encontrado");
+        }
+
+        Estacionamento estacionamentoEncontrado = estacionamento.get();
+
+        if (estacionamentoEncontrado.getEmpresa().getId() != usuarioLogado.getEmpresa().getId()){
+            throw new DomainException("Você não tem acesso a essas informações");
+        }
+
+        if (usuarioLogado.getEstacionamento() == null || usuarioLogado.getEstacionamento().getId() == estacionamentoId){
+            lista = usuarioRepository.findByEstacionamentoId(estacionamentoId);
+            return lista;
+        }
+        else
+        {
+            throw new DomainException("Você não tem acesso a essas informações");
+        }
+
+    }
 
     @Transactional
     public Usuario criar(UsuarioFormDTO dadosUsuario, Long estacionamentoId) {
