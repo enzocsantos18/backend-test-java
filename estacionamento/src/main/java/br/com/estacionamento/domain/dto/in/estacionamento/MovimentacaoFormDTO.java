@@ -1,4 +1,4 @@
-package br.com.estacionamento.domain.dto.in;
+package br.com.estacionamento.domain.dto.in.estacionamento;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

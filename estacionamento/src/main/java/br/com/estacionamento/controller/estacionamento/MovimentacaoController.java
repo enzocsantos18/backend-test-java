@@ -1,6 +1,7 @@
 package br.com.estacionamento.controller.estacionamento;
 
-import br.com.estacionamento.domain.dto.in.MovimentacaoFormDTO;
+import br.com.estacionamento.domain.dto.in.estacionamento.MovimentacaoFormDTO;
+import br.com.estacionamento.domain.dto.out.estacionamento.RespostaMovimentacaoDTO;
 import br.com.estacionamento.domain.estacionamento.Movimentacao;
 import br.com.estacionamento.service.estacionamento.MovimentacaoService;
 import br.com.estacionamento.service.security.UserInformationService;
@@ -24,16 +25,16 @@ public class MovimentacaoController {
     private UserInformationService userInformationService;
 
     @PostMapping("/entrada")
-    public ResponseEntity<Movimentacao> entrada(@RequestBody @Valid MovimentacaoFormDTO dadosMovimentacao, Authentication authentication) {
+    public ResponseEntity<RespostaMovimentacaoDTO> entrada(@RequestBody @Valid MovimentacaoFormDTO dadosMovimentacao, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-        Movimentacao movimentacao = movimentacaoService.entrada(dadosMovimentacao, estacionamentoId);
+        RespostaMovimentacaoDTO movimentacao = movimentacaoService.entrada(dadosMovimentacao, estacionamentoId);
         return ResponseEntity.ok(movimentacao);
     }
 
     @PostMapping("/saida")
-    public ResponseEntity<Movimentacao> saida(@RequestBody @Valid MovimentacaoFormDTO dadosMovimentacao, Authentication authentication) {
+    public ResponseEntity<RespostaMovimentacaoDTO> saida(@RequestBody @Valid MovimentacaoFormDTO dadosMovimentacao, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-        Movimentacao movimentacao = movimentacaoService.saida(dadosMovimentacao, estacionamentoId);
+        RespostaMovimentacaoDTO movimentacao = movimentacaoService.saida(dadosMovimentacao, estacionamentoId);
         return ResponseEntity.ok(movimentacao);
     }
 }

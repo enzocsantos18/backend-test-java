@@ -1,4 +1,4 @@
-package br.com.estacionamento.domain.dto.in;
+package br.com.estacionamento.domain.dto.in.usuario;
 
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.usuario.TipoUsuario;

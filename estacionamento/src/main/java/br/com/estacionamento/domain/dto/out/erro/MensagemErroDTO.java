@@ -1,4 +1,4 @@
-package br.com.estacionamento.domain.dto.out;
+package br.com.estacionamento.domain.dto.out.erro;
 
 import java.time.LocalDateTime;
 

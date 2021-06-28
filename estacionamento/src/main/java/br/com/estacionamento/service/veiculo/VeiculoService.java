@@ -2,7 +2,8 @@ package br.com.estacionamento.service.veiculo;
 
 import br.com.estacionamento.config.exception.DomainException;
 import br.com.estacionamento.config.exception.DomainNotFoundException;
-import br.com.estacionamento.domain.dto.in.VeiculoFormDTO;
+import br.com.estacionamento.domain.dto.in.veiculo.VeiculoFormDTO;
+import br.com.estacionamento.domain.dto.out.veiculo.RespostaVeiculoDTO;
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.estacionamento.Movimentacao;
 import br.com.estacionamento.domain.veiculo.Modelo;
@@ -32,12 +33,15 @@ public class VeiculoService {
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
 
-    public Veiculo buscar(String placa, long estacionamentoId) {
-        return getVeiculo(placa, estacionamentoId);
+    public RespostaVeiculoDTO buscar(String placa, long estacionamentoId) {
+        Veiculo veiculo = getVeiculo(placa, estacionamentoId);
+
+        RespostaVeiculoDTO veiculoResposta = new RespostaVeiculoDTO(veiculo);
+        return veiculoResposta;
     }
 
     @Transactional
-    public Veiculo criar(VeiculoFormDTO veiculoDTO, Long estacionamentoId) {
+    public RespostaVeiculoDTO criar(VeiculoFormDTO veiculoDTO, Long estacionamentoId) {
         Modelo modelo = getModelo(veiculoDTO.getId_modelo());
         Estacionamento estacionamento = getEstacionamento(estacionamentoId);
 
@@ -47,7 +51,10 @@ public class VeiculoService {
         }
 
         Veiculo veiculo = veiculoDTO.converterParaVeiculo(modelo, estacionamento);
-        return veiculoRepository.save(veiculo);
+
+        Veiculo veiculoCriado = veiculoRepository.save(veiculo);
+        RespostaVeiculoDTO veiculoResposta = new RespostaVeiculoDTO(veiculoCriado);
+        return veiculoResposta;
     }
 
     @Transactional

@@ -2,8 +2,9 @@ package br.com.estacionamento.service.estacionamento;
 
 import br.com.estacionamento.config.exception.DomainException;
 import br.com.estacionamento.config.exception.DomainNotFoundException;
-import br.com.estacionamento.domain.dto.in.EstacionamentoFormDTO;
-import br.com.estacionamento.domain.dto.in.EstacionamentoFormUpdateDTO;
+import br.com.estacionamento.domain.dto.in.estacionamento.EstacionamentoFormDTO;
+import br.com.estacionamento.domain.dto.in.estacionamento.EstacionamentoFormUpdateDTO;
+import br.com.estacionamento.domain.dto.out.estacionamento.RespostaEstacionamentoDTO;
 import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.usuario.TipoUsuario;
@@ -35,16 +36,23 @@ public class EstacionamentoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Estacionamento> listar(Long empresaId) {
-        return estacionamentoRepository.findByEmpresaId(empresaId);
+    public List<RespostaEstacionamentoDTO> listar(Long empresaId) {
+        List<Estacionamento> estacionamentos = estacionamentoRepository.findByEmpresaId(empresaId);
+
+        List<RespostaEstacionamentoDTO> respostaEstacionamentos = RespostaEstacionamentoDTO.converter(estacionamentos);
+
+        return respostaEstacionamentos;
     }
 
-    public Estacionamento buscar(Long empresaId, Long estacionamentoId) {
-        return getEstacionamento(empresaId, estacionamentoId);
+    public RespostaEstacionamentoDTO buscar(Long empresaId, Long estacionamentoId) {
+        Estacionamento estacionamento = getEstacionamento(empresaId, estacionamentoId);
+
+        RespostaEstacionamentoDTO respostaEstacionamento = new RespostaEstacionamentoDTO(estacionamento);
+        return respostaEstacionamento;
     }
 
     @Transactional
-    public Estacionamento criar(EstacionamentoFormDTO dadosEstacionamento, Long empresaId) {
+    public RespostaEstacionamentoDTO criar(EstacionamentoFormDTO dadosEstacionamento, Long empresaId) {
         Optional<Empresa> empresaEncotrada = empresaRepository.findById(empresaId);
         if (!empresaEncotrada.isPresent()) {
             throw new DomainNotFoundException("Empresa não encontrada");
@@ -64,16 +72,20 @@ public class EstacionamentoService {
 
         Usuario usuarioCriado = usuarioRepository.save(usuario);
 
-        return estacionamentoRepository.save(estacionamento);
+        RespostaEstacionamentoDTO respostaEstacionamento = new RespostaEstacionamentoDTO(estacionamentoCriado);
+
+        return respostaEstacionamento;
     }
 
     @Transactional
-    public Estacionamento atualizar(Long empresaId, Long estacionamentoId, EstacionamentoFormUpdateDTO dadosEstacionamento) {
+    public RespostaEstacionamentoDTO atualizar(Long empresaId, Long estacionamentoId, EstacionamentoFormUpdateDTO dadosEstacionamento) {
         Estacionamento estacionamento = getEstacionamento(empresaId, estacionamentoId);
         verificaDisponibilidadeNome(empresaId, dadosEstacionamento.getNome());
         estacionamento.setNome(dadosEstacionamento.getNome());
 
-        return estacionamentoRepository.save(estacionamento);
+        Estacionamento estacionamentoAtualizado = estacionamentoRepository.save(estacionamento);
+        RespostaEstacionamentoDTO respostaEstacionamento = new RespostaEstacionamentoDTO(estacionamentoAtualizado);
+        return respostaEstacionamento;
     }
 
     @Transactional

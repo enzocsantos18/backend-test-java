@@ -1,4 +1,4 @@
-package br.com.estacionamento.domain.dto.out;
+package br.com.estacionamento.domain.dto.out.empresa;
 
 public class EnderecoDTO {
     private String cep;

@@ -1,7 +1,7 @@
 package br.com.estacionamento.config.exception;
 
-import br.com.estacionamento.domain.dto.out.ErroDeFormularioDTO;
-import br.com.estacionamento.domain.dto.out.MensagemErroDTO;
+import br.com.estacionamento.domain.dto.out.erro.ErroDeFormularioDTO;
+import br.com.estacionamento.domain.dto.out.erro.MensagemErroDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

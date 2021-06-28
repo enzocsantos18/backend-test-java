@@ -1,6 +1,7 @@
 package br.com.estacionamento.controller.estacionamento;
 
-import br.com.estacionamento.domain.dto.in.VagaFormDTO;
+import br.com.estacionamento.domain.dto.in.estacionamento.VagaFormDTO;
+import br.com.estacionamento.domain.dto.out.estacionamento.RespostaVagaDTO;
 import br.com.estacionamento.domain.estacionamento.Vaga;
 import br.com.estacionamento.service.estacionamento.VagaService;
 import br.com.estacionamento.service.security.UserInformationService;
@@ -23,23 +24,23 @@ public class VagaController {
     private UserInformationService userInformationService;
 
     @GetMapping
-    public ResponseEntity<List<Vaga>> buscar(Authentication authentication) {
+    public ResponseEntity<List<RespostaVagaDTO>> buscar(Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-        List<Vaga> vagas = vagaService.buscar(estacionamentoId);
+        List<RespostaVagaDTO> vagas = vagaService.buscar(estacionamentoId);
         return ResponseEntity.ok(vagas);
     }
 
     @PostMapping
-    public ResponseEntity<Vaga> criar(@RequestBody @Valid VagaFormDTO dadosVaga, Authentication authentication) {
+    public ResponseEntity<RespostaVagaDTO> criar(@RequestBody @Valid VagaFormDTO dadosVaga, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-        Vaga vaga = vagaService.criar(dadosVaga, estacionamentoId);
+        RespostaVagaDTO vaga = vagaService.criar(dadosVaga, estacionamentoId);
         return ResponseEntity.status(201).body(vaga);
     }
 
     @PutMapping
-    public ResponseEntity<Vaga> atualizar(@RequestBody @Valid VagaFormDTO dadosVaga, Authentication authentication) {
+    public ResponseEntity<RespostaVagaDTO> atualizar(@RequestBody @Valid VagaFormDTO dadosVaga, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-        Vaga vaga = vagaService.atualizar(dadosVaga, estacionamentoId);
+        RespostaVagaDTO vaga = vagaService.atualizar(dadosVaga, estacionamentoId);
         return ResponseEntity.ok(vaga);
     }
 

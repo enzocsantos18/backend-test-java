@@ -1,4 +1,4 @@
-package br.com.estacionamento.domain.dto.in;
+package br.com.estacionamento.domain.dto.in.empresa;
 
 import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.empresa.Telefone;

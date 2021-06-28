@@ -1,7 +1,8 @@
 package br.com.estacionamento.controller.usuario;
 
-import br.com.estacionamento.domain.dto.in.UsuarioFormDTO;
-import br.com.estacionamento.domain.dto.in.UsuarioFormUpdateDTO;
+import br.com.estacionamento.domain.dto.in.usuario.UsuarioFormDTO;
+import br.com.estacionamento.domain.dto.in.usuario.UsuarioFormUpdateDTO;
+import br.com.estacionamento.domain.dto.out.usuario.RespostaUsuarioDTO;
 import br.com.estacionamento.domain.usuario.Usuario;
 import br.com.estacionamento.service.security.UserInformationService;
 import br.com.estacionamento.service.usuario.UsuarioService;
@@ -23,29 +24,30 @@ public class UsuarioController {
     private UserInformationService userInformationService;
 
     @GetMapping
-    public ResponseEntity<Usuario> buscar(Authentication authentication) {
-        Usuario usuario = userInformationService.getUsuario(authentication);
+    public ResponseEntity<RespostaUsuarioDTO> buscar(Authentication authentication) {
+        Usuario usuarioLogado = userInformationService.getUsuario(authentication);
+        RespostaUsuarioDTO usuario = new RespostaUsuarioDTO(usuarioLogado);
         return ResponseEntity.ok(usuario);
     }
 
     @GetMapping("/{estacionamentoId}")
-    public ResponseEntity<List<Usuario>> listar(@PathVariable("estacionamentoId") Long estacionamentoId,Authentication authentication) {
+    public ResponseEntity<List<RespostaUsuarioDTO>> listar(@PathVariable("estacionamentoId") Long estacionamentoId,Authentication authentication) {
         Usuario usuarioLogado = userInformationService.getUsuario(authentication);
-        List<Usuario> usuarios = usuarioService.listar(usuarioLogado, estacionamentoId);
+        List<RespostaUsuarioDTO> usuarios = usuarioService.listar(usuarioLogado, estacionamentoId);
         return ResponseEntity.ok(usuarios);
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> criar(@RequestBody @Valid UsuarioFormDTO usuarioFormDTO, Authentication authentication) {
+    public ResponseEntity<RespostaUsuarioDTO> criar(@RequestBody @Valid UsuarioFormDTO usuarioFormDTO, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
-        Usuario usuario = usuarioService.criar(usuarioFormDTO, estacionamentoId);
+        RespostaUsuarioDTO usuario = usuarioService.criar(usuarioFormDTO, estacionamentoId);
         return ResponseEntity.status(201).body(usuario);
     }
 
     @PutMapping
-    public ResponseEntity<Usuario> atualizar(@RequestBody @Valid UsuarioFormUpdateDTO dadosUsuario, Authentication authentication) {
+    public ResponseEntity<RespostaUsuarioDTO> atualizar(@RequestBody @Valid UsuarioFormUpdateDTO dadosUsuario, Authentication authentication) {
         Usuario usuarioLogado = userInformationService.getUsuario(authentication);
-        Usuario usuario = usuarioService.atualizar(dadosUsuario, usuarioLogado);
+        RespostaUsuarioDTO usuario = usuarioService.atualizar(dadosUsuario, usuarioLogado);
         return ResponseEntity.ok(usuario);
     }
 }

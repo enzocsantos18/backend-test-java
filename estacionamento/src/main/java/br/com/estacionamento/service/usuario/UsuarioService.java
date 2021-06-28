@@ -2,15 +2,15 @@ package br.com.estacionamento.service.usuario;
 
 import br.com.estacionamento.config.exception.DomainException;
 import br.com.estacionamento.config.exception.DomainNotFoundException;
-import br.com.estacionamento.domain.dto.in.UsuarioFormDTO;
-import br.com.estacionamento.domain.dto.in.UsuarioFormUpdateDTO;
+import br.com.estacionamento.domain.dto.in.usuario.UsuarioFormDTO;
+import br.com.estacionamento.domain.dto.in.usuario.UsuarioFormUpdateDTO;
+import br.com.estacionamento.domain.dto.out.usuario.RespostaUsuarioDTO;
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.usuario.TipoUsuario;
 import br.com.estacionamento.domain.usuario.Usuario;
 import br.com.estacionamento.repository.estacionamento.EstacionamentoRepository;
 import br.com.estacionamento.repository.usuario.TipoUsuarioRepository;
 import br.com.estacionamento.repository.usuario.UsuarioRepository;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class UsuarioService {
     private TipoUsuarioRepository tipoUsuarioRepository;
 
 
-    public List<Usuario> listar(Usuario usuarioLogado, Long estacionamentoId){
+    public List<RespostaUsuarioDTO> listar(Usuario usuarioLogado, Long estacionamentoId){
         List<Usuario> lista = new ArrayList<>();
         Optional<Estacionamento> estacionamento = estacionamentoRepository.findById(estacionamentoId);
         if (estacionamento.isEmpty()){
@@ -45,7 +45,8 @@ public class UsuarioService {
 
         if (usuarioLogado.getEstacionamento() == null || usuarioLogado.getEstacionamento().getId() == estacionamentoId){
             lista = usuarioRepository.findByEstacionamentoId(estacionamentoId);
-            return lista;
+            List<RespostaUsuarioDTO> respostaUsuarios = RespostaUsuarioDTO.converter(lista);
+            return respostaUsuarios;
         }
         else
         {
@@ -55,7 +56,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario criar(UsuarioFormDTO dadosUsuario, Long estacionamentoId) {
+    public RespostaUsuarioDTO criar(UsuarioFormDTO dadosUsuario, Long estacionamentoId) {
         Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(estacionamentoId);
 
         if (estacionamentoEncontrado.isEmpty()){
@@ -86,19 +87,22 @@ public class UsuarioService {
 
 
         Usuario usuarioCriado = usuarioRepository.save(usuario);
+        RespostaUsuarioDTO respostaUsuario = new RespostaUsuarioDTO(usuarioCriado);
 
-        return usuarioCriado;
+        return respostaUsuario;
 
     }
 
     @Transactional
-    public Usuario atualizar(UsuarioFormUpdateDTO dadosUsuario, Usuario usuario) {
+    public RespostaUsuarioDTO atualizar(UsuarioFormUpdateDTO dadosUsuario, Usuario usuario) {
         usuario.setSenha(dadosUsuario.getSenha());
         usuario.setNome(dadosUsuario.getNome());
 
         Usuario usuarioAtualizado = usuarioRepository.save(usuario);
 
-        return usuarioAtualizado;
+        RespostaUsuarioDTO respostaUsuario = new RespostaUsuarioDTO(usuarioAtualizado);
+
+        return respostaUsuario;
 
     }
 }

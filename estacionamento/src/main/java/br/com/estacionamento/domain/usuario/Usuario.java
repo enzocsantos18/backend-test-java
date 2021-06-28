@@ -50,6 +50,10 @@ public class Usuario implements UserDetails {
         this.tipos.add(tipo);
     }
 
+    public String getNome() {
+        return nome;
+    }
+
     @Override
     public String getPassword() {
         return senha;
@@ -74,6 +78,10 @@ public class Usuario implements UserDetails {
 
     public void setEstacionamento(Estacionamento estacionamento) {
         this.estacionamento = estacionamento;
+    }
+
+    public List<TipoUsuario> getTipos() {
+        return tipos;
     }
 
     @Override

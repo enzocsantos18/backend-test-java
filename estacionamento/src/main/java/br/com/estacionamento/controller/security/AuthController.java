@@ -1,7 +1,7 @@
 package br.com.estacionamento.controller.security;
 
-import br.com.estacionamento.domain.dto.in.LoginFormDTO;
-import br.com.estacionamento.domain.dto.out.TokenDto;
+import br.com.estacionamento.domain.dto.in.security.LoginFormDTO;
+import br.com.estacionamento.domain.dto.out.security.TokenDto;
 import br.com.estacionamento.service.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

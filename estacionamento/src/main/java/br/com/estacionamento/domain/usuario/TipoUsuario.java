@@ -1,5 +1,6 @@
 package br.com.estacionamento.domain.usuario;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ public class TipoUsuario implements GrantedAuthority {
     private Long id;
     private String nome;
 
+    @JsonIgnore
     @Override
     public String getAuthority() {
         return nome;

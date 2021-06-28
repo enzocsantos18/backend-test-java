@@ -2,7 +2,8 @@ package br.com.estacionamento.service.estacionamento;
 
 import br.com.estacionamento.config.exception.DomainException;
 import br.com.estacionamento.config.exception.DomainNotFoundException;
-import br.com.estacionamento.domain.dto.in.MovimentacaoFormDTO;
+import br.com.estacionamento.domain.dto.in.estacionamento.MovimentacaoFormDTO;
+import br.com.estacionamento.domain.dto.out.estacionamento.RespostaMovimentacaoDTO;
 import br.com.estacionamento.domain.estacionamento.Movimentacao;
 import br.com.estacionamento.domain.estacionamento.Vaga;
 import br.com.estacionamento.domain.veiculo.Veiculo;
@@ -25,19 +26,25 @@ public class MovimentacaoService {
     @Autowired
     private VagaRepository vagaRepository;
 
-    public Movimentacao entrada(MovimentacaoFormDTO dadosMovimentacao, Long estacionamentoId) {
+    public RespostaMovimentacaoDTO entrada(MovimentacaoFormDTO dadosMovimentacao, Long estacionamentoId) {
         Veiculo veiculo = getVeiculo(dadosMovimentacao.getPlaca(), estacionamentoId);
         verificaDisponibilidadeDeVaga(veiculo);
         Movimentacao movimentacao = verificaEntrada(veiculo);
 
-        return movimentacaoRepository.save(movimentacao);
+        Movimentacao movimentacaoCriada = movimentacaoRepository.save(movimentacao);
+
+        RespostaMovimentacaoDTO movimentacaoResposta = new RespostaMovimentacaoDTO(movimentacaoCriada);
+        return movimentacaoResposta;
+
     }
 
-    public Movimentacao saida(MovimentacaoFormDTO dadosMovimentacao, Long estacionamentoId) {
+    public RespostaMovimentacaoDTO saida(MovimentacaoFormDTO dadosMovimentacao, Long estacionamentoId) {
         Veiculo veiculo = getVeiculo(dadosMovimentacao.getPlaca(), estacionamentoId);
         Movimentacao movimentacao = verificaSaida(veiculo);
 
-        return movimentacaoRepository.save(movimentacao);
+        Movimentacao movimentacaoCriada = movimentacaoRepository.save(movimentacao);
+        RespostaMovimentacaoDTO movimentacaoResposta = new RespostaMovimentacaoDTO(movimentacaoCriada);
+        return movimentacaoResposta;
     }
 
     private Movimentacao verificaEntrada(Veiculo veiculo) {

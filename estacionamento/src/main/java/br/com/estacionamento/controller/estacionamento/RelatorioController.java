@@ -1,6 +1,6 @@
 package br.com.estacionamento.controller.estacionamento;
 
-import br.com.estacionamento.domain.dto.in.RelatorioFormDTO;
+import br.com.estacionamento.domain.dto.in.estacionamento.RelatorioFormDTO;
 import br.com.estacionamento.domain.estacionamento.EntradasSaidasHorarioRelatorio;
 import br.com.estacionamento.domain.estacionamento.EntradasSaidasRelatorio;
 import br.com.estacionamento.service.estacionamento.RelatorioService;

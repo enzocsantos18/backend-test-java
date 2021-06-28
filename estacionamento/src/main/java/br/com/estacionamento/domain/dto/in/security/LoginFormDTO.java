@@ -1,4 +1,4 @@
-package br.com.estacionamento.domain.dto.in;
+package br.com.estacionamento.domain.dto.in.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 

@@ -2,8 +2,9 @@ package br.com.estacionamento.service.empresa;
 
 import br.com.estacionamento.config.exception.DomainException;
 import br.com.estacionamento.config.exception.DomainNotFoundException;
-import br.com.estacionamento.domain.dto.in.EmpresaFormDTO;
-import br.com.estacionamento.domain.dto.in.EmpresaFormUpdateDTO;
+import br.com.estacionamento.domain.dto.in.empresa.EmpresaFormDTO;
+import br.com.estacionamento.domain.dto.in.empresa.EmpresaFormUpdateDTO;
+import br.com.estacionamento.domain.dto.out.empresa.RespostaEmpresaDTO;
 import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.empresa.Endereco;
 import br.com.estacionamento.domain.empresa.Telefone;
@@ -37,12 +38,15 @@ public class EmpresaService {
     private TipoUsuarioRepository tipoUsuarioRepository;
 
 
-    public Empresa buscar(Long id) {
-        return encontrarPorId(id);
+    public RespostaEmpresaDTO buscar(Long id) {
+        Empresa empresa = encontrarPorId(id);
+        RespostaEmpresaDTO repostaEmpresa = new RespostaEmpresaDTO(empresa);
+
+        return repostaEmpresa;
     }
 
     @Transactional
-    public Empresa criar(EmpresaFormDTO dadosEmpresa) {
+    public RespostaEmpresaDTO criar(EmpresaFormDTO dadosEmpresa) {
         Empresa empresa = dadosEmpresa.converterParaEmpresa();
 
         validarCnpj(empresa.getCnpj());
@@ -70,7 +74,10 @@ public class EmpresaService {
 
             Usuario usuarioCriado = usuarioRepository.save(usuario);
 
-            return empresaSalva;
+            RespostaEmpresaDTO respostaEmpresa = new RespostaEmpresaDTO(empresaSalva);
+
+
+            return respostaEmpresa;
         } catch (Exception e) {
             throw new DomainException("Cadastro empresa não foi realizado, confira os dados novamente.");
         }
@@ -78,7 +85,7 @@ public class EmpresaService {
 
 
     @Transactional
-    public Empresa atualizar(EmpresaFormUpdateDTO dadosEmpresa, Long empresaId) {
+    public RespostaEmpresaDTO atualizar(EmpresaFormUpdateDTO dadosEmpresa, Long empresaId) {
         try {
             Empresa empresa = encontrarPorId(empresaId);
             Endereco endereco = empresa.getEndereco();
@@ -93,7 +100,11 @@ public class EmpresaService {
             Empresa novosDadosEmpresa = dadosEmpresa.converterParaEmpresa(empresa);
             novosDadosEmpresa.setEndereco(novoEndereco);
 
-            return empresaRepository.save(novosDadosEmpresa);
+            Empresa empresaSalva = empresaRepository.save(novosDadosEmpresa);
+            RespostaEmpresaDTO respostaEmpresa = new RespostaEmpresaDTO(empresaSalva);
+
+            return respostaEmpresa;
+
         } catch (Exception e) {
             throw new DomainException("Cadastro empresa não foi realizado, confira os dados novamente.");
         }

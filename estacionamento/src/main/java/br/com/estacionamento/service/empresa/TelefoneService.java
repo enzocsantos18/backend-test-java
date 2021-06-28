@@ -1,7 +1,8 @@
 package br.com.estacionamento.service.empresa;
 
 import br.com.estacionamento.config.exception.DomainNotFoundException;
-import br.com.estacionamento.domain.dto.in.TelefoneFormDTO;
+import br.com.estacionamento.domain.dto.in.empresa.TelefoneFormDTO;
+import br.com.estacionamento.domain.dto.out.empresa.RespostaTelefoneDTO;
 import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.empresa.Telefone;
 import br.com.estacionamento.repository.empresa.EmpresaRepository;
@@ -34,7 +35,7 @@ public class TelefoneService {
     }
 
     @Transactional
-    public Telefone criar(TelefoneFormDTO dadosTelefone, Long empresaId) {
+    public RespostaTelefoneDTO criar(TelefoneFormDTO dadosTelefone, Long empresaId) {
         Optional<Telefone> verificarTelefone = telefoneRepository.findByNumeroAndEmpresaId(dadosTelefone.getNumero(), empresaId);
 
         if (verificarTelefone.isPresent()) {
@@ -45,7 +46,9 @@ public class TelefoneService {
         Telefone telefone = dadosTelefone.converterParaTelefone(empresa);
 
 
-        return telefoneRepository.save(telefone);
+        Telefone telefoneCriado = telefoneRepository.save(telefone);
+        RespostaTelefoneDTO respostaTelefone = new RespostaTelefoneDTO(telefoneCriado);
+        return respostaTelefone;
     }
 
     private Empresa getEmpresa(Long id) {

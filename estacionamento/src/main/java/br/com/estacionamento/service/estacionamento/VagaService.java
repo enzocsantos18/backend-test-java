@@ -2,7 +2,8 @@ package br.com.estacionamento.service.estacionamento;
 
 import br.com.estacionamento.config.exception.DomainException;
 import br.com.estacionamento.config.exception.DomainNotFoundException;
-import br.com.estacionamento.domain.dto.in.VagaFormDTO;
+import br.com.estacionamento.domain.dto.in.estacionamento.VagaFormDTO;
+import br.com.estacionamento.domain.dto.out.estacionamento.RespostaVagaDTO;
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.estacionamento.Vaga;
 import br.com.estacionamento.domain.veiculo.TipoVeiculo;
@@ -27,11 +28,15 @@ public class VagaService {
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
 
-    public List<Vaga> buscar(Long estacionamentoId) {
-        return vagaRepository.findByEstacionamentoId(estacionamentoId);
+    public List<RespostaVagaDTO> buscar(Long estacionamentoId) {
+        List<Vaga> vagas = vagaRepository.findByEstacionamentoId(estacionamentoId);
+
+        List<RespostaVagaDTO> vagasResposta = RespostaVagaDTO.converter(vagas);
+
+        return vagasResposta;
     }
 
-    public Vaga criar(VagaFormDTO dadosVaga, Long estacionamentoId) {
+    public RespostaVagaDTO criar(VagaFormDTO dadosVaga, Long estacionamentoId) {
 
         Estacionamento estacionamento = getEstacionamento(estacionamentoId);
         TipoVeiculo tipo = getTipoVeiculo(dadosVaga.getTipo_id());
@@ -39,24 +44,28 @@ public class VagaService {
         verificarDisponibilidadeTipoVaga(dadosVaga, estacionamentoId);
 
         Vaga vaga = dadosVaga.converterParaVaga(estacionamento, tipo);
-        return vagaRepository.save(vaga);
+        Vaga vagaCriada = vagaRepository.save(vaga);
+
+        RespostaVagaDTO respostaVaga = new RespostaVagaDTO(vagaCriada);
+        return respostaVaga;
+
     }
 
-    public Vaga atualizar(VagaFormDTO dadosVaga, Long estacionamentoId) {
+    public RespostaVagaDTO atualizar(VagaFormDTO dadosVaga, Long estacionamentoId) {
         Estacionamento estacionamento = getEstacionamento(estacionamentoId);
         TipoVeiculo tipo = getTipoVeiculo(dadosVaga.getTipo_id());
         verificaQuantidadeParaAlteracao(estacionamentoId, dadosVaga.getTipo_id(), (long) dadosVaga.getQuantidade());
         Vaga vaga = getVaga(dadosVaga.getTipo_id(), estacionamentoId);
         vaga.setQuantidade(dadosVaga.getQuantidade());
-        return vagaRepository.save(vaga);
+        Vaga vagaAtualizada = vagaRepository.save(vaga);
+
+        RespostaVagaDTO respostaVaga = new RespostaVagaDTO(vagaAtualizada);
+        return respostaVaga;
     }
 
     public void deletar(Long estacionamentoId, Long tipoVagaId) {
         Vaga vaga = getVaga(tipoVagaId, estacionamentoId);
-
         verificaQuantidadeParaAlteracao(estacionamentoId, tipoVagaId, 0L);
-
-
         vagaRepository.delete(vaga);
     }
 

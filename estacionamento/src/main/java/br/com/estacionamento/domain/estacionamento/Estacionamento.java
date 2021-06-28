@@ -4,6 +4,7 @@ import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.usuario.Usuario;
 import br.com.estacionamento.domain.veiculo.Veiculo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,6 +15,7 @@ public class Estacionamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    @JsonIgnore
     @ManyToOne
     private Empresa empresa;
     @JsonIgnore
@@ -53,5 +55,9 @@ public class Estacionamento {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Vaga> getVagas() {
+        return vagas;
     }
 }

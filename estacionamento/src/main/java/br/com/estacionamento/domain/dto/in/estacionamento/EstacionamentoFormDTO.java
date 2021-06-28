@@ -1,28 +1,28 @@
-package br.com.estacionamento.domain.dto.in;
+package br.com.estacionamento.domain.dto.in.estacionamento;
 
 import br.com.estacionamento.domain.empresa.Empresa;
-import br.com.estacionamento.domain.empresa.Telefone;
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.usuario.TipoUsuario;
 import br.com.estacionamento.domain.usuario.Usuario;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-public class UsuarioFormDTO {
+public class EstacionamentoFormDTO {
     @NotNull @NotEmpty
     private String nome;
-    @Pattern(regexp = "^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$", message = "email enviado com formato incorreto!")
-    @NotBlank
     private String email;
     @NotBlank
     @Length(min = 6, max = 12)
     private String senha;
-    @NotNull
-    @Min(1L)
-    private Long tipo_usuario_id;
+    @NotBlank
+    private String nome_usuario;
 
+    public EstacionamentoFormDTO() {
+    }
 
     public String getNome() {
         return nome;
@@ -31,7 +31,6 @@ public class UsuarioFormDTO {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
 
     public String getEmail() {
         return email;
@@ -49,23 +48,32 @@ public class UsuarioFormDTO {
         this.senha = senha;
     }
 
-    public Long getTipo_usuario_id() {
-        return tipo_usuario_id;
+    public String getNome_usuario() {
+        return nome_usuario;
     }
 
-    public void setTipo_usuario_id(Long tipo_usuario_id) {
-        this.tipo_usuario_id = tipo_usuario_id;
+    public void setNome_usuario(String nome_usuario) {
+        this.nome_usuario = nome_usuario;
     }
 
-    public Usuario converterParaUsuario(Estacionamento estacionamento,TipoUsuario tipo){
+    public Estacionamento converterParaEstacionamento(Empresa empresa) {
+        Estacionamento estacionamento = new Estacionamento();
+
+        estacionamento.setNome(nome);
+        estacionamento.setEmpresa(empresa);
+
+        return estacionamento;
+    }
+
+    public Usuario converterParaUsuario(Empresa empresa,Estacionamento estacionamento, TipoUsuario tipo){
         Usuario usuario = new Usuario();
         usuario.setEmail(this.email);
-        usuario.setNome(this.nome);
+        usuario.setNome(this.nome_usuario);
         usuario.setSenha( new BCryptPasswordEncoder().encode(this.senha));
-        usuario.setEmpresa(estacionamento.getEmpresa());
+        usuario.setEmpresa(empresa);
         usuario.setEstacionamento(estacionamento);
         usuario.setTipos(tipo);
-
         return usuario;
     }
+
 }

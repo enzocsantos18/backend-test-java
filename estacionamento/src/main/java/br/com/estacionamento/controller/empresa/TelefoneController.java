@@ -1,6 +1,7 @@
 package br.com.estacionamento.controller.empresa;
 
-import br.com.estacionamento.domain.dto.in.TelefoneFormDTO;
+import br.com.estacionamento.domain.dto.in.empresa.TelefoneFormDTO;
+import br.com.estacionamento.domain.dto.out.empresa.RespostaTelefoneDTO;
 import br.com.estacionamento.domain.empresa.Telefone;
 import br.com.estacionamento.service.empresa.TelefoneService;
 import br.com.estacionamento.service.security.UserInformationService;
@@ -20,9 +21,9 @@ public class TelefoneController {
     private TelefoneService telefoneService;
 
     @PostMapping
-    public ResponseEntity<Telefone> criar(@RequestBody @Valid TelefoneFormDTO dadosTelefone, Authentication authentication) {
+    public ResponseEntity<RespostaTelefoneDTO> criar(@RequestBody @Valid TelefoneFormDTO dadosTelefone, Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
-        Telefone telefone = telefoneService.criar(dadosTelefone, empresaId);
+        RespostaTelefoneDTO telefone = telefoneService.criar(dadosTelefone, empresaId);
         return ResponseEntity.status(201).body(telefone);
     }
 
