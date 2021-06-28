@@ -14,7 +14,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 
-
 @RestController
 @RequestMapping("/empresa")
 public class EmpresaController {
@@ -33,10 +32,9 @@ public class EmpresaController {
     }
 
     @PostMapping
-    public ResponseEntity<Empresa> criar(@Valid @RequestBody EmpresaFormDTO dadosEmpresa, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Empresa> criar(@Valid @RequestBody EmpresaFormDTO dadosEmpresa) {
         Empresa empresa = empresaService.criar(dadosEmpresa);
-        URI uri = uriBuilder.path("/empresa/{id}").buildAndExpand(empresa.getId()).toUri();
-        return ResponseEntity.created(uri).body(empresa);
+        return ResponseEntity.status(201).body(empresa);
     }
 
     @PutMapping
@@ -50,6 +48,6 @@ public class EmpresaController {
     public ResponseEntity deletar(Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
         empresaService.deletar(empresaId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

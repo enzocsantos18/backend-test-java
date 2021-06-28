@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -36,7 +35,6 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-
     @PostMapping
     public ResponseEntity<Usuario> criar(@RequestBody @Valid UsuarioFormDTO usuarioFormDTO, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
@@ -50,6 +48,4 @@ public class UsuarioController {
         Usuario usuario = usuarioService.atualizar(dadosUsuario, usuarioLogado);
         return ResponseEntity.ok(usuario);
     }
-
-
 }

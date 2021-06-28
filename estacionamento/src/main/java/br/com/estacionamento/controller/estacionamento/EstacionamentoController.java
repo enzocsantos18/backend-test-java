@@ -40,12 +40,10 @@ public class EstacionamentoController {
 
     @PostMapping
     public ResponseEntity<Estacionamento> criar(@RequestBody @Valid EstacionamentoFormDTO dadosEstacionamento,
-                                                Authentication authentication,
-                                                UriComponentsBuilder uriBuilder) {
+                                                Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
         Estacionamento estacionamento = estacionamentoService.criar(dadosEstacionamento, empresaId);
-        URI uri = uriBuilder.path("/estacionamento/{id}").buildAndExpand(estacionamento.getId()).toUri();
-        return ResponseEntity.created(uri).body(estacionamento);
+        return ResponseEntity.status(201).body(estacionamento);
     }
 
     @PutMapping("/{id}")
@@ -62,6 +60,6 @@ public class EstacionamentoController {
     public ResponseEntity deletar(@PathVariable("id") Long estacionamentoId, Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
         estacionamentoService.deletar(empresaId, estacionamentoId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

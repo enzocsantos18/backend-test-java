@@ -33,7 +33,7 @@ public class VagaController {
     public ResponseEntity<Vaga> criar(@RequestBody @Valid VagaFormDTO dadosVaga, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
         Vaga vaga = vagaService.criar(dadosVaga, estacionamentoId);
-        return ResponseEntity.ok(vaga);
+        return ResponseEntity.status(201).body(vaga);
     }
 
     @PutMapping
@@ -47,6 +47,6 @@ public class VagaController {
     public ResponseEntity deletar(@PathVariable("tipoVaga") Long tipoVagaId, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
         vagaService.deletar(estacionamentoId, tipoVagaId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

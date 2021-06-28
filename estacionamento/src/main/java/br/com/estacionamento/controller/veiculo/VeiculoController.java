@@ -31,24 +31,21 @@ public class VeiculoController {
         return ResponseEntity.ok(veiculo);
     }
 
-
     @PostMapping
     public ResponseEntity<Veiculo> criar(
             @RequestBody @Valid VeiculoFormDTO dadosVeiculo,
-            UriComponentsBuilder uriBuilder,
             Authentication authentication
     ) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
         Veiculo veiculo = veiculoService.criar(dadosVeiculo, estacionamentoId);
-        URI uri = uriBuilder.path("/veiculo/{placa}").buildAndExpand(veiculo.getPlaca()).toUri();
-        return ResponseEntity.created(uri).body(veiculo);
+        return ResponseEntity.status(201).body(veiculo);
     }
 
     @DeleteMapping("/{placa}")
     public ResponseEntity deletar(@PathVariable("placa") String placa, Authentication authentication) {
         Long estacionamentoId = userInformationService.getEstacionamentoId(authentication);
         veiculoService.deletar(placa, estacionamentoId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

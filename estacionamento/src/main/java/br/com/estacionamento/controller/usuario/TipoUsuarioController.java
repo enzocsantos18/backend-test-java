@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/tipo/usuario")
 public class TipoUsuarioController {
@@ -22,6 +21,4 @@ public class TipoUsuarioController {
         List<TipoUsuario> tipos = tipoUsuarioService.listar();
         return ResponseEntity.ok(tipos);
     }
-
-
 }

@@ -31,6 +31,4 @@ public class TipoVeiculoController {
         List<TipoVeiculo> listar = tipoVeiculoService.listar();
         return ResponseEntity.ok(listar);
     }
-
-
 }

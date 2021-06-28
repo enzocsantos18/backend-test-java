@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-
 @RestController
 @RequestMapping("/empresa/telefone")
 public class TelefoneController {
@@ -31,6 +30,6 @@ public class TelefoneController {
     public ResponseEntity deletar(@RequestBody @Valid TelefoneFormDTO dadosTelefone, Authentication authentication) {
         Long empresaId = userInformationService.getEmpresaId(authentication);
         telefoneService.deletar(dadosTelefone, empresaId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

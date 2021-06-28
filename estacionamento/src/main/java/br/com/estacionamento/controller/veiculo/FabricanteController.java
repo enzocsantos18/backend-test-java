@@ -22,6 +22,4 @@ public class FabricanteController {
         List<Fabricante> fabricantes = fabricanteService.listar();
         return ResponseEntity.ok(fabricantes);
     }
-
-
 }

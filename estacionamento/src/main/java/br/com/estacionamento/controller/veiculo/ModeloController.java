@@ -22,6 +22,4 @@ public class ModeloController {
         List<Modelo> modelos = modeloService.listar(fabricanteId);
         return ResponseEntity.ok(modelos);
     }
-
-
 }
