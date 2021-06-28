@@ -2,10 +2,14 @@ package br.com.estacionamento.domain.estacionamento;
 
 import br.com.estacionamento.domain.veiculo.TipoVeiculo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 public class Vaga {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,37 +22,5 @@ public class Vaga {
     private Integer quantidade;
 
     public Vaga() {
-    }
-
-    public Estacionamento getEstacionamento() {
-        return estacionamento;
-    }
-
-    public void setEstacionamento(Estacionamento estacionamento) {
-        this.estacionamento = estacionamento;
-    }
-
-    public TipoVeiculo getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TipoVeiculo tipo) {
-        this.tipo = tipo;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

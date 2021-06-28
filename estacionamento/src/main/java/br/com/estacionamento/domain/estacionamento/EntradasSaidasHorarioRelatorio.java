@@ -1,8 +1,13 @@
 package br.com.estacionamento.domain.estacionamento;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
 public class EntradasSaidasHorarioRelatorio {
     private Date horario;
     private Long entradas;
@@ -21,25 +26,5 @@ public class EntradasSaidasHorarioRelatorio {
         this.horario.setSeconds(0);
         this.horario.setMinutes(0);
         return horario;
-    }
-
-    public void setHorario(Date horario) {
-        this.horario = horario;
-    }
-
-    public Long getEntradas() {
-        return entradas;
-    }
-
-    public void setEntradas(Long entradas) {
-        this.entradas = entradas;
-    }
-
-    public Long getSaidas() {
-        return saidas;
-    }
-
-    public void setSaidas(Long saidas) {
-        this.saidas = saidas;
     }
 }

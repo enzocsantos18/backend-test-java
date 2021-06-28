@@ -4,6 +4,8 @@ import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.usuario.TipoUsuario;
 import br.com.estacionamento.domain.usuario.Usuario;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -11,6 +13,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+@Getter
+@Setter
 public class EstacionamentoFormDTO {
     @NotNull @NotEmpty
     private String nome;
@@ -22,38 +26,6 @@ public class EstacionamentoFormDTO {
     private String nome_usuario;
 
     public EstacionamentoFormDTO() {
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getNome_usuario() {
-        return nome_usuario;
-    }
-
-    public void setNome_usuario(String nome_usuario) {
-        this.nome_usuario = nome_usuario;
     }
 
     public Estacionamento converterParaEstacionamento(Empresa empresa) {

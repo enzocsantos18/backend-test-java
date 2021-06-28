@@ -1,9 +1,13 @@
 package br.com.estacionamento.domain.dto.out.erro;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 
+@Getter
+@Setter
 public class ErroDeFormularioDTO {
 
     private HttpStatus status;
@@ -12,23 +16,6 @@ public class ErroDeFormularioDTO {
     public ErroDeFormularioDTO(HttpStatus status, HashMap<String, String> erros) {
         super();
         this.status = status;
-        this.erros = erros;
-    }
-
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(HttpStatus status) {
-        this.status = status;
-    }
-
-
-    public HashMap<String, String> getErros() {
-        return erros;
-    }
-
-    public void setErros(HashMap<String, String> erros) {
         this.erros = erros;
     }
 }

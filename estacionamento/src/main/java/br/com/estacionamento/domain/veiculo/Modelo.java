@@ -1,7 +1,12 @@
 package br.com.estacionamento.domain.veiculo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
 public class Modelo {
     @Id
@@ -13,35 +18,4 @@ public class Modelo {
     @ManyToOne
     private Fabricante fabricante;
 
-    public String getNome() {
-        return nome;
-    }
-
-    public TipoVeiculo getTipoVeiculo() {
-        return tipoVeiculo;
-    }
-
-    public Fabricante getFabricante() {
-        return fabricante;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setTipoVeiculo(TipoVeiculo tipoVeiculo) {
-        this.tipoVeiculo = tipoVeiculo;
-    }
-
-    public void setFabricante(Fabricante fabricante) {
-        this.fabricante = fabricante;
-    }
 }

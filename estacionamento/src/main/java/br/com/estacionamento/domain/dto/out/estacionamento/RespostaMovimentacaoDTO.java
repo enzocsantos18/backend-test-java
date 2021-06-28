@@ -1,23 +1,14 @@
 package br.com.estacionamento.domain.dto.out.estacionamento;
 
-import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.estacionamento.Movimentacao;
-import br.com.estacionamento.domain.estacionamento.Vaga;
-import br.com.estacionamento.domain.veiculo.Veiculo;
 import lombok.Getter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 public class RespostaMovimentacaoDTO {
-
-
     private Long id;
     private String placa;
     private String modelo;

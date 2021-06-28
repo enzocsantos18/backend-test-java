@@ -1,5 +1,10 @@
 package br.com.estacionamento.domain.dto.out.empresa;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class EnderecoDTO {
     private String cep;
     private String logradouro;

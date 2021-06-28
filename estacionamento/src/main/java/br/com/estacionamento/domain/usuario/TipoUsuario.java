@@ -1,12 +1,16 @@
 package br.com.estacionamento.domain.usuario;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
+@Getter
+@Setter
 public class TipoUsuario implements GrantedAuthority {
     @Id
     private Long id;
@@ -18,20 +22,4 @@ public class TipoUsuario implements GrantedAuthority {
         return nome;
     }
 
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

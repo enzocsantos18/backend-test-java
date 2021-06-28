@@ -4,11 +4,15 @@ import br.com.estacionamento.domain.empresa.Empresa;
 import br.com.estacionamento.domain.empresa.Telefone;
 import br.com.estacionamento.domain.usuario.TipoUsuario;
 import br.com.estacionamento.domain.usuario.Usuario;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.*;
 
+@Getter
+@Setter
 public class EmpresaFormDTO {
     @NotNull @NotEmpty
     private String nome;
@@ -30,69 +34,6 @@ public class EmpresaFormDTO {
     @NotBlank
     private String nome_usuario;
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
-
-    public Telefone getTelefone() {
-        return new Telefone(this.telefone);
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getNome_usuario() {
-        return nome_usuario;
-    }
-
-    public void setNome_usuario(String nome_usuario) {
-        this.nome_usuario = nome_usuario;
-    }
 
     public Empresa converterParaEmpresa(){
         Empresa empresa = new Empresa();
@@ -111,5 +52,9 @@ public class EmpresaFormDTO {
         usuario.setTipos(tipo);
 
         return usuario;
+    }
+
+    public Telefone getTelefone() {
+        return new Telefone(this.telefone);
     }
 }
