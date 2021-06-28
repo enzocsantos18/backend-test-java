@@ -2,7 +2,6 @@ package br.com.estacionamento.domain.dto.out.estacionamento;
 
 import br.com.estacionamento.domain.estacionamento.Estacionamento;
 import br.com.estacionamento.domain.estacionamento.Vaga;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 
 import java.util.List;

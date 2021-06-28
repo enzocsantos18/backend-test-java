@@ -35,7 +35,6 @@ public class VeiculoService {
 
     public RespostaVeiculoDTO buscar(String placa, long estacionamentoId) {
         Veiculo veiculo = getVeiculo(placa, estacionamentoId);
-
         RespostaVeiculoDTO veiculoResposta = new RespostaVeiculoDTO(veiculo);
         return veiculoResposta;
     }
@@ -45,10 +44,7 @@ public class VeiculoService {
         Modelo modelo = getModelo(veiculoDTO.getId_modelo());
         Estacionamento estacionamento = getEstacionamento(estacionamentoId);
 
-        Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(veiculoDTO.getPlaca(), estacionamentoId);
-        if (veiculoEncontrado.isPresent()) {
-            throw new DomainException("Veiculo já cadastrado");
-        }
+        verificaDisponibilidadeVeiculo(veiculoDTO, estacionamentoId);
 
         Veiculo veiculo = veiculoDTO.converterParaVeiculo(modelo, estacionamento);
 
@@ -64,6 +60,13 @@ public class VeiculoService {
         verificarSeEstaNoPatio(placa, estacionamentoId);
 
         veiculoRepository.delete(veiculo);
+    }
+
+    private void verificaDisponibilidadeVeiculo(VeiculoFormDTO veiculoDTO, Long estacionamentoId) {
+        Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(veiculoDTO.getPlaca(), estacionamentoId);
+        if (veiculoEncontrado.isPresent()) {
+            throw new DomainException("Veiculo já cadastrado");
+        }
     }
 
     private void verificarSeEstaNoPatio(String placa, Long estacionamentoId) {

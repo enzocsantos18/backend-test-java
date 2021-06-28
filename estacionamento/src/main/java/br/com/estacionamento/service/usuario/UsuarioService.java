@@ -32,12 +32,7 @@ public class UsuarioService {
 
     public List<RespostaUsuarioDTO> listar(Usuario usuarioLogado, Long estacionamentoId){
         List<Usuario> lista = new ArrayList<>();
-        Optional<Estacionamento> estacionamento = estacionamentoRepository.findById(estacionamentoId);
-        if (estacionamento.isEmpty()){
-            throw new DomainNotFoundException("Estacionamento não encontrado");
-        }
-
-        Estacionamento estacionamentoEncontrado = estacionamento.get();
+        Estacionamento estacionamentoEncontrado = getEstacionamento(estacionamentoId);
 
         if (estacionamentoEncontrado.getEmpresa().getId() != usuarioLogado.getEmpresa().getId()){
             throw new DomainException("Você não tem acesso a essas informações");
@@ -57,13 +52,8 @@ public class UsuarioService {
 
     @Transactional
     public RespostaUsuarioDTO criar(UsuarioFormDTO dadosUsuario, Long estacionamentoId) {
-        Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(estacionamentoId);
+        Estacionamento estacionamentoEncontrado = getEstacionamento(estacionamentoId);
 
-        if (estacionamentoEncontrado.isEmpty()){
-            throw new DomainNotFoundException("Estacionamento não encontrado");
-        }
-
-        Estacionamento estacionamento = estacionamentoEncontrado.get();
 
         Optional<TipoUsuario> tipoEncontrado = tipoUsuarioRepository.findById(dadosUsuario.getTipo_usuario_id());
 
@@ -77,7 +67,7 @@ public class UsuarioService {
             throw new DomainException("Não é possível criar usuários desse tipo");
         }
 
-        Usuario usuario = dadosUsuario.converterParaUsuario(estacionamento, tipoUsuario);
+        Usuario usuario = dadosUsuario.converterParaUsuario(estacionamentoEncontrado, tipoUsuario);
 
         Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(usuario.getEmail());
 
@@ -103,6 +93,15 @@ public class UsuarioService {
         RespostaUsuarioDTO respostaUsuario = new RespostaUsuarioDTO(usuarioAtualizado);
 
         return respostaUsuario;
-
     }
+
+    private Estacionamento getEstacionamento(Long estacionamentoId) {
+        Optional<Estacionamento> estacionamento = estacionamentoRepository.findById(estacionamentoId);
+
+        if (!estacionamento.isPresent()) {
+            throw new DomainNotFoundException("Estacionamento não encontrado");
+        }
+        return estacionamento.get();
+    }
+
 }

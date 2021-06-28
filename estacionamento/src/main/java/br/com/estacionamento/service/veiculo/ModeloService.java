@@ -15,7 +15,6 @@ public class ModeloService {
     public List<Modelo> listar(Long fabricanteId) {
         List<Modelo> modelos;
         if (fabricanteId == null) {
-
             modelos = modeloRepository.findAll();
         } else {
             modelos = modeloRepository.findAllByFabricanteId(fabricanteId);

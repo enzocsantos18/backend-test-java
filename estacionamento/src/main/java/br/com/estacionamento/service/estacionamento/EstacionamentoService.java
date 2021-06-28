@@ -38,7 +38,6 @@ public class EstacionamentoService {
 
     public List<RespostaEstacionamentoDTO> listar(Long empresaId) {
         List<Estacionamento> estacionamentos = estacionamentoRepository.findByEmpresaId(empresaId);
-
         List<RespostaEstacionamentoDTO> respostaEstacionamentos = RespostaEstacionamentoDTO.converter(estacionamentos);
 
         return respostaEstacionamentos;
@@ -46,29 +45,23 @@ public class EstacionamentoService {
 
     public RespostaEstacionamentoDTO buscar(Long empresaId, Long estacionamentoId) {
         Estacionamento estacionamento = getEstacionamento(empresaId, estacionamentoId);
-
         RespostaEstacionamentoDTO respostaEstacionamento = new RespostaEstacionamentoDTO(estacionamento);
+
         return respostaEstacionamento;
     }
 
     @Transactional
     public RespostaEstacionamentoDTO criar(EstacionamentoFormDTO dadosEstacionamento, Long empresaId) {
-        Optional<Empresa> empresaEncotrada = empresaRepository.findById(empresaId);
-        if (!empresaEncotrada.isPresent()) {
-            throw new DomainNotFoundException("Empresa não encontrada");
-        }
+        Empresa empresa = getEmpresa(empresaId);
+        Estacionamento estacionamento = dadosEstacionamento.converterParaEstacionamento(empresa);
 
-        Estacionamento estacionamento = dadosEstacionamento.converterParaEstacionamento(empresaEncotrada.get());
         verificaDisponibilidadeNome(empresaId, dadosEstacionamento.getNome());
+
         Estacionamento estacionamentoCriado = estacionamentoRepository.save(estacionamento);
         TipoUsuario tipo = tipoUsuarioRepository.findOneByNome("admin_estacionamento");
-        Usuario usuario = dadosEstacionamento.converterParaUsuario(empresaEncotrada.get(), estacionamentoCriado, tipo);
+        Usuario usuario = dadosEstacionamento.converterParaUsuario(empresa, estacionamentoCriado, tipo);
 
-        Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(dadosEstacionamento.getEmail());
-        if (usuarioEncontrado.isPresent()){
-            throw new DomainException("Usuário já cadastrado!");
-        }
-
+        verificaDisponibilidadeEmail(dadosEstacionamento.getEmail());
 
         Usuario usuarioCriado = usuarioRepository.save(usuario);
 
@@ -82,19 +75,34 @@ public class EstacionamentoService {
         Estacionamento estacionamento = getEstacionamento(empresaId, estacionamentoId);
         verificaDisponibilidadeNome(empresaId, dadosEstacionamento.getNome());
         estacionamento.setNome(dadosEstacionamento.getNome());
-
         Estacionamento estacionamentoAtualizado = estacionamentoRepository.save(estacionamento);
         RespostaEstacionamentoDTO respostaEstacionamento = new RespostaEstacionamentoDTO(estacionamentoAtualizado);
+
         return respostaEstacionamento;
     }
 
     @Transactional
     public void deletar(Long empresaId, Long estacionamentoId) {
         Estacionamento estacionamento = getEstacionamento(empresaId, estacionamentoId);
-
         estacionamentoRepository.delete(estacionamento);
     }
 
+
+    private void verificaDisponibilidadeEmail(String email) {
+        Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(email);
+        if (usuarioEncontrado.isPresent()){
+            throw new DomainException("Usuário já cadastrado!");
+        }
+    }
+
+    private Empresa getEmpresa(Long id) {
+        Optional<Empresa> empresa = empresaRepository.findById(id);
+        if (!empresa.isPresent()) {
+            throw new DomainNotFoundException("Empresa não encontrada");
+        }
+
+        return empresa.get();
+    }
 
     private void verificaDisponibilidadeNome(Long empresaId, String nome) {
         Optional<Estacionamento> estacionamento = estacionamentoRepository.findByNomeAndEmpresaId(nome, empresaId);

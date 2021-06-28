@@ -1,5 +1,6 @@
 package br.com.estacionamento.service.empresa;
 
+import br.com.estacionamento.config.exception.DomainException;
 import br.com.estacionamento.config.exception.DomainNotFoundException;
 import br.com.estacionamento.domain.dto.in.empresa.TelefoneFormDTO;
 import br.com.estacionamento.domain.dto.out.empresa.RespostaTelefoneDTO;
@@ -39,7 +40,7 @@ public class TelefoneService {
         Optional<Telefone> verificarTelefone = telefoneRepository.findByNumeroAndEmpresaId(dadosTelefone.getNumero(), empresaId);
 
         if (verificarTelefone.isPresent()) {
-            throw new DomainNotFoundException("Número já cadastrado");
+            throw new DomainException("Número já cadastrado");
         }
 
         Empresa empresa = getEmpresa(empresaId);
