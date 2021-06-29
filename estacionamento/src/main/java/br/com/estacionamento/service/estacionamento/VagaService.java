@@ -77,6 +77,16 @@ public class VagaService {
         }
     }
 
+    private void verificarDisponibilidadeTipoVaga(VagaFormDTO dadosVaga, Long estacionamentoId) {
+        Optional<Vaga> temVaga = vagaRepository.findByEstacionamentoIdAndTipoId(
+                estacionamentoId,
+                dadosVaga.getTipo_id());
+
+        if (temVaga.isPresent()) {
+            throw new DomainException("Não é possível criar mais uma vaga para esse tipo");
+        }
+    }
+
     private Vaga getVaga(Long tipoId, Long estacionamentoId) {
         Optional<Vaga> temVaga = vagaRepository.findByEstacionamentoIdAndTipoId(
                 estacionamentoId,
@@ -87,16 +97,6 @@ public class VagaService {
         }
 
         return temVaga.get();
-    }
-
-    private void verificarDisponibilidadeTipoVaga(VagaFormDTO dadosVaga, Long estacionamentoId) {
-        Optional<Vaga> temVaga = vagaRepository.findByEstacionamentoIdAndTipoId(
-                estacionamentoId,
-                dadosVaga.getTipo_id());
-
-        if (temVaga.isPresent()) {
-            throw new DomainException("Não é possível criar mais uma vaga para esse tipo");
-        }
     }
 
     private TipoVeiculo getTipoVeiculo(Long tipoId) {
