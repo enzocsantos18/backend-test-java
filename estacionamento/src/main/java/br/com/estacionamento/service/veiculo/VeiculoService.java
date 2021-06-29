@@ -62,14 +62,14 @@ public class VeiculoService {
         veiculoRepository.delete(veiculo);
     }
 
-    private void verificaDisponibilidadeVeiculo(VeiculoFormDTO veiculoDTO, Long estacionamentoId) {
+    public void verificaDisponibilidadeVeiculo(VeiculoFormDTO veiculoDTO, Long estacionamentoId) {
         Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(veiculoDTO.getPlaca(), estacionamentoId);
         if (veiculoEncontrado.isPresent()) {
             throw new DomainException("Veiculo já cadastrado");
         }
     }
 
-    private void verificarSeEstaNoPatio(String placa, Long estacionamentoId) {
+    public void verificarSeEstaNoPatio(String placa, Long estacionamentoId) {
         Optional<Movimentacao> movimentacao = movimentacaoRepository.findFirstByVeiculoPlacaAndVeiculoEstacionamentoIdOrderByIdDesc(placa, estacionamentoId);
 
         if (movimentacao.isPresent() && movimentacao.get().getSaida() == null) {
@@ -78,7 +78,7 @@ public class VeiculoService {
 
     }
 
-    private Estacionamento getEstacionamento(Long estacionamentoId) {
+    public Estacionamento getEstacionamento(Long estacionamentoId) {
         Optional<Estacionamento> estacionamentoEncontrado = estacionamentoRepository.findById(estacionamentoId);
         if (!estacionamentoEncontrado.isPresent()) {
             throw new DomainNotFoundException("Estacionamento não existe");
@@ -86,7 +86,7 @@ public class VeiculoService {
         return estacionamentoEncontrado.get();
     }
 
-    private Modelo getModelo(Long modeloId) {
+    public Modelo getModelo(Long modeloId) {
         Optional<Modelo> modeloEncontrado = modeloRepository.findById(modeloId);
         if (!modeloEncontrado.isPresent()) {
             throw new DomainNotFoundException("Modelo não existente");
@@ -94,7 +94,7 @@ public class VeiculoService {
         return modeloEncontrado.get();
     }
 
-    private Veiculo getVeiculo(String placa, long estacionamentoId) {
+    public Veiculo getVeiculo(String placa, long estacionamentoId) {
         Optional<Veiculo> veiculo = veiculoRepository.findByPlacaAndEstacionamento(placa, estacionamentoId);
 
         if (!veiculo.isPresent()) {
