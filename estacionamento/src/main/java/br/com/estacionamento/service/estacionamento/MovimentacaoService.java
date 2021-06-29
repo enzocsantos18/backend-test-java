@@ -47,7 +47,7 @@ public class MovimentacaoService {
         return movimentacaoResposta;
     }
 
-    private Movimentacao verificaEntrada(Veiculo veiculo) {
+    public Movimentacao verificaEntrada(Veiculo veiculo) {
         Optional<Movimentacao> verificarMovimentacao = movimentacaoRepository.findFirstByVeiculoPlacaAndVeiculoEstacionamentoIdOrderByIdDesc(
                 veiculo.getPlaca(),
                 veiculo.getEstacionamento().getId()
@@ -64,7 +64,7 @@ public class MovimentacaoService {
         return movimentacao;
     }
 
-    private Movimentacao verificaSaida(Veiculo veiculo) {
+    public Movimentacao verificaSaida(Veiculo veiculo) {
         Optional<Movimentacao> verificarMovimentacao = movimentacaoRepository.findFirstByVeiculoPlacaAndVeiculoEstacionamentoIdOrderByIdDesc(
                 veiculo.getPlaca(),
                 veiculo.getEstacionamento().getId()
@@ -80,7 +80,7 @@ public class MovimentacaoService {
         return movimentacao;
     }
 
-    private Veiculo getVeiculo(String placa, Long estacionamentoId) {
+    public Veiculo getVeiculo(String placa, Long estacionamentoId) {
         Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlacaAndEstacionamento(placa, estacionamentoId);
         if (!veiculoEncontrado.isPresent()) {
             throw new DomainNotFoundException("Veiculo não encontrado");
@@ -89,7 +89,7 @@ public class MovimentacaoService {
         return veiculoEncontrado.get();
     }
 
-    private void verificaDisponibilidadeDeVaga(Veiculo veiculo) {
+    public void verificaDisponibilidadeDeVaga(Veiculo veiculo) {
         Long quantidadeDeMovimentacoes = movimentacaoRepository.contagemDeVeiculosPorTipoEmEstacionamento(
                 veiculo.getModelo().getTipoVeiculo().getId(),
                 veiculo.getEstacionamento().getId()
