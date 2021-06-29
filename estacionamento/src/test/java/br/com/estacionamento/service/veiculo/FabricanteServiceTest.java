@@ -1,7 +1,6 @@
 package br.com.estacionamento.service.veiculo;
 
 import br.com.estacionamento.domain.veiculo.Fabricante;
-import br.com.estacionamento.service.veiculo.FabricanteService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,10 +21,12 @@ class FabricanteServiceTest {
     void deveriaListarFabricantes() {
         Fabricante fabricante = new Fabricante();
         fabricante.setId(1L);
-        fabricante.setId(1L);
+        fabricante.setNome("Honda");
         when(fabricanteService.listar()).thenReturn(Arrays.asList(fabricante, fabricante, fabricante));
         List<Fabricante> fabricantes = fabricanteService.listar();
 
+        assertTrue(fabricantes.get(1).getId() == 1L);
+        assertTrue(fabricantes.get(1).getNome() == "Honda");
         assertTrue(fabricantes.size() == 3);
     }
 
@@ -36,6 +37,4 @@ class FabricanteServiceTest {
 
         assertTrue(fabricantes.size() == 0);
     }
-
-
 }
