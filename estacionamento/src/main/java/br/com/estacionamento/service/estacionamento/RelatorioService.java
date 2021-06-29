@@ -53,13 +53,13 @@ public class RelatorioService {
         }
     }
 
-    private void checarData(Date dataInicial, Date dataFinal) {
+    public void checarData(Date dataInicial, Date dataFinal) {
         if (dataFinal.before(dataInicial)) {
             throw new DomainException("Data inicial maior que data final");
         }
     }
 
-    private Date parseDate(String date) throws ParseException {
+    public Date parseDate(String date) throws ParseException {
         return new SimpleDateFormat("yyyy-MM-dd").parse(date);
     }
 }
