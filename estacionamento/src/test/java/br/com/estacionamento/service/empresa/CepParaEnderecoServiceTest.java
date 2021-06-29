@@ -1,18 +1,15 @@
-package br.com.estacionamento.service;
+package br.com.estacionamento.service.empresa;
 
 import br.com.estacionamento.domain.empresa.Endereco;
-import br.com.estacionamento.service.empresa.CepParaEnderecoService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-@ExtendWith(SpringExtension.class)
+
+
 @SpringBootTest
 class CepParaEnderecoServiceTest {
-
     @Autowired
     private CepParaEnderecoService cepParaEnderecoService;
 
@@ -28,6 +25,18 @@ class CepParaEnderecoServiceTest {
             assertEquals(enderecoBusca.getEstado(), "SP");
         } catch (Exception e) {
             fail("Erro ao gerar endereço");
+        }
+    }
+
+    @Test
+    void naoDeveriaEncontrarDadosDeEndereco() {
+
+        try {
+            Endereco enderecoBusca = cepParaEnderecoService.buscarDadosEndereco("00000-000", 202);
+            fail("Foi encontrado o endereço");
+
+        } catch (Exception e) {
+            assertTrue(e.getMessage() != "");
         }
     }
 }
