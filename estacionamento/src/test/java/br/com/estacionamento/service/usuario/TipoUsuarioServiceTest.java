@@ -1,7 +1,9 @@
 package br.com.estacionamento.service.usuario;
 
 import br.com.estacionamento.domain.usuario.TipoUsuario;
+import br.com.estacionamento.repository.usuario.TipoUsuarioRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,15 +16,18 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class TipoUsuarioServiceTest {
 
-    @Mock
+    @InjectMocks
     private TipoUsuarioService tipoUsuarioService;
+
+    @Mock
+    private TipoUsuarioRepository tipoUsuarioRepository;
 
     @Test
     void deveriaListarTiposUsuario() {
         TipoUsuario tipoUsuario = new TipoUsuario();
         tipoUsuario.setId(1L);
         tipoUsuario.setNome("admin");
-        when(tipoUsuarioService.listar()).thenReturn(Arrays.asList(tipoUsuario, tipoUsuario, tipoUsuario));
+        when(tipoUsuarioRepository.findAll()).thenReturn(Arrays.asList(tipoUsuario, tipoUsuario, tipoUsuario));
         List<TipoUsuario> tipos = tipoUsuarioService.listar();
 
         assertTrue(tipos.get(1).getNome() == "admin");
@@ -32,7 +37,7 @@ class TipoUsuarioServiceTest {
 
     @Test
     void deveriaRetornarListaDeTiposDeUsuariosVazia() {
-        when(tipoUsuarioService.listar()).thenReturn(Arrays.asList());
+        when(tipoUsuarioRepository.findAll()).thenReturn(Arrays.asList());
         List<TipoUsuario> tipos = tipoUsuarioService.listar();
 
         assertTrue(tipos.size() == 0);

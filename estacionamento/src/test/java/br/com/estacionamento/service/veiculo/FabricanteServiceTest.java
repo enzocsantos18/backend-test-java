@@ -1,7 +1,9 @@
 package br.com.estacionamento.service.veiculo;
 
 import br.com.estacionamento.domain.veiculo.Fabricante;
+import br.com.estacionamento.repository.veiculo.FabricanteRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,15 +16,17 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class FabricanteServiceTest {
-    @Mock
+    @InjectMocks
     private FabricanteService fabricanteService;
+    @Mock
+    private FabricanteRepository fabricanteRepository;
 
     @Test
     void deveriaListarFabricantes() {
         Fabricante fabricante = new Fabricante();
         fabricante.setId(1L);
         fabricante.setNome("Honda");
-        when(fabricanteService.listar()).thenReturn(Arrays.asList(fabricante, fabricante, fabricante));
+        when(fabricanteRepository.findAll()).thenReturn(Arrays.asList(fabricante, fabricante, fabricante));
         List<Fabricante> fabricantes = fabricanteService.listar();
 
         assertTrue(fabricantes.get(1).getId() == 1L);
@@ -32,7 +36,7 @@ class FabricanteServiceTest {
 
     @Test
     void deveriaRetornarListaDeFabricantesVazia() {
-        when(fabricanteService.listar()).thenReturn(Arrays.asList());
+        when(fabricanteRepository.findAll()).thenReturn(Arrays.asList());
         List<Fabricante> fabricantes = fabricanteService.listar();
 
         assertTrue(fabricantes.size() == 0);
