@@ -87,11 +87,17 @@ public class EstacionamentoService {
         estacionamentoRepository.delete(estacionamento);
     }
 
-
-    private void verificaDisponibilidadeEmail(String email) {
+    public void verificaDisponibilidadeEmail(String email) {
         Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(email);
         if (usuarioEncontrado.isPresent()){
             throw new DomainException("Usuário já cadastrado!");
+        }
+    }
+
+    public void verificaDisponibilidadeNome(Long empresaId, String nome) {
+        Optional<Estacionamento> estacionamento = estacionamentoRepository.findByNomeAndEmpresaId(nome, empresaId);
+        if (estacionamento.isPresent()) {
+            throw new DomainException("Já existe um estacionamento com esse nome cadastrado!");
         }
     }
 
@@ -102,13 +108,6 @@ public class EstacionamentoService {
         }
 
         return empresa.get();
-    }
-
-    private void verificaDisponibilidadeNome(Long empresaId, String nome) {
-        Optional<Estacionamento> estacionamento = estacionamentoRepository.findByNomeAndEmpresaId(nome, empresaId);
-        if (estacionamento.isPresent()) {
-            throw new DomainException("Já existe um estacionamento com esse nome cadastrado!");
-        }
     }
 
     private Estacionamento getEstacionamento(Long empresaId, Long estacionamentoId) {
