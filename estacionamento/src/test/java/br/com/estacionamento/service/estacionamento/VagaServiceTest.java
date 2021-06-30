@@ -158,6 +158,7 @@ class VagaServiceTest {
 
         when(vagaRepository.findByEstacionamentoIdAndTipoId(anyLong(), anyLong())).thenReturn(vagaOptional); //vaga
         when(movimentacaoRepository.contagemDeVeiculosPorTipoEmEstacionamento(anyLong(), anyLong())).thenReturn(0L);
+        doNothing().when(vagaRepository).delete(vaga);
 
         vagaService.deletar(1L, 1L);
 
