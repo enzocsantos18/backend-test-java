@@ -23,7 +23,6 @@ import java.util.Optional;
 
 @Service
 public class EmpresaService {
-
     @Autowired
     private CepParaEnderecoService cepParaEnderecoService;
     @Autowired
@@ -36,7 +35,6 @@ public class EmpresaService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private TipoUsuarioRepository tipoUsuarioRepository;
-
 
     public RespostaEmpresaDTO buscar(Long id) {
         Empresa empresa = encontrarPorId(id);
@@ -83,7 +81,6 @@ public class EmpresaService {
         }
     }
 
-
     @Transactional
     public RespostaEmpresaDTO atualizar(EmpresaFormUpdateDTO dadosEmpresa, Long empresaId) {
         try {
@@ -116,6 +113,13 @@ public class EmpresaService {
         empresaRepository.deleteById(empresa.getId());
     }
 
+    public void validarCnpj(String cnpj) {
+        Optional<Empresa> empresa = empresaRepository.findByCnpj(cnpj);
+        if (empresa.isPresent()) {
+            throw new DomainException("Cnpj já cadastrado.");
+        }
+    }
+
     private Empresa encontrarPorId(Long id) {
         Optional<Empresa> empresa = empresaRepository.findById(id);
         if (!empresa.isPresent()) {
@@ -123,12 +127,6 @@ public class EmpresaService {
         }
 
         return empresa.get();
-    }
-
-    private void validarCnpj(String cnpj) {
-        if (empresaRepository.findByCnpj(cnpj).isPresent()) {
-            throw new DomainException("Cnpj já cadastrado.");
-        }
     }
 
 }

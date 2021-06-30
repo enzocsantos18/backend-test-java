@@ -23,6 +23,10 @@ public class EmpresaFormUpdateDTO {
     private Integer numero;
 
 
+    public String getCep() {
+        return cep.replace("-", "");
+    }
+
     public Empresa converterParaEmpresa(Empresa empresa){
         empresa.setNome(this.nome);
         empresa.setCnpj(this.cnpj);
