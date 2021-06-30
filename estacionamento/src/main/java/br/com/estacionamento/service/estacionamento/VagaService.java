@@ -41,7 +41,7 @@ public class VagaService {
         Estacionamento estacionamento = getEstacionamento(estacionamentoId);
         TipoVeiculo tipo = getTipoVeiculo(dadosVaga.getTipo_id());
 
-        verificarDisponibilidadeTipoVaga(dadosVaga, estacionamentoId);
+        verificarDisponibilidadeTipoVaga(dadosVaga.getTipo_id(), estacionamentoId);
 
         Vaga vaga = dadosVaga.converterParaVaga(estacionamento, tipo);
         Vaga vagaCriada = vagaRepository.save(vaga);
@@ -69,7 +69,7 @@ public class VagaService {
         vagaRepository.delete(vaga);
     }
 
-    private void verificaQuantidadeParaAlteracao(Long estacionamentoId, Long tipoVagaId, Long quantidade) {
+    public void verificaQuantidadeParaAlteracao(Long estacionamentoId, Long tipoVagaId, Long quantidade) {
         Long vagasOcupadas = movimentacaoRepository.contagemDeVeiculosPorTipoEmEstacionamento(tipoVagaId, estacionamentoId);
 
         if (vagasOcupadas > quantidade) {
@@ -77,10 +77,10 @@ public class VagaService {
         }
     }
 
-    private void verificarDisponibilidadeTipoVaga(VagaFormDTO dadosVaga, Long estacionamentoId) {
+    public void verificarDisponibilidadeTipoVaga(Long tipoVagaId, Long estacionamentoId) {
         Optional<Vaga> temVaga = vagaRepository.findByEstacionamentoIdAndTipoId(
                 estacionamentoId,
-                dadosVaga.getTipo_id());
+                tipoVagaId);
 
         if (temVaga.isPresent()) {
             throw new DomainException("Não é possível criar mais uma vaga para esse tipo");
