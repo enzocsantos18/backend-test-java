@@ -6,8 +6,11 @@ import br.com.estacionamento.domain.veiculo.Veiculo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,16 +29,15 @@ public class Estacionamento {
     @Setter
     private Empresa empresa;
     @JsonIgnore
-    @OneToMany(mappedBy = "estacionamento", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "estacionamento", cascade = CascadeType.ALL)
     private List<Veiculo> veiculos;
     @JsonIgnore
-    @OneToMany(mappedBy = "estacionamento", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "estacionamento", cascade = CascadeType.ALL)
     @Getter
     private List<Vaga> vagas;
     @JsonIgnore
-    @Getter
-    @OneToMany(mappedBy = "estacionamento", cascade = CascadeType.REMOVE)
-    private List<Usuario> usuarios;
+    @OneToMany(mappedBy = "estacionamento", cascade = CascadeType.ALL)
+    private List<Usuario> usuarios = new ArrayList<>();
 
 
     public Estacionamento() {
