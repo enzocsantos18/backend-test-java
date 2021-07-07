@@ -1,14 +1,11 @@
 # 🚘 API Estacionamento
----
 Api para controle de estacionamentos, onde uma empresa pode ter todos seus estacionamentos cadastrados de forma individual tirando proveito da criação de usuários com diferentes funções administrativas, controle a entrada e saída de veículos, geração relatórios de movimentações, etc...
 
 ## Documentação da API
----
 Clique nesse link para ter acesso a documentação: [https://documenter.getpostman.com/view/9120629/TzkyP1AY](https://documenter.getpostman.com/view/9120629/TzkyP1AY)
 
 
 ## Tecnologias
----
 - [Java com o framework Spring Boot] - API
 - [JUnit e Mockito] - Testes automátizados
 - [Token JWT] - Autenticação
