@@ -57,4 +57,8 @@ public class EmpresaFormDTO {
     public Telefone getTelefone() {
         return new Telefone(this.telefone);
     }
+
+    public String getCep() {
+        return cep.replace("-", "");
+    }
 }
